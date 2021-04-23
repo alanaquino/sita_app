@@ -41,18 +41,17 @@
 
       <div class="logo">
         <!-- Uncomment below if you prefer to use an text logo -->
-        <!-- <h1><a href="{{url_for('home')}}">NewBiz</a></h1> -->
-        <a href="{{url_for('home')}}"><img src="static/img/logo-simple.png" alt="" class="img-fluid"></a>
+        <!-- <h1><a href="{{url_for('index')}}">NewBiz</a></h1> -->
+        <a href="{{url_for('index')}}"><img src="static/img/logo-simple.png" alt="" class="img-fluid"></a>
       </div>
 
       <nav id="navbar" class="navbar">
         {% block navbar %}
         <ul>
-          <li><a class="nav-link scrollto active" href="{{url_for('home')}}">Inicio</a></li>
-          <li><a class="nav-link scrollto" href="{{url_for('buscar')}}">Buscar</a></li>
-          <li class="dropdown"><a href="#" class="text-decoration-none"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-          </li>
-          <li><a class="nav-link scrollto" href="{{url_for('single')}}">Single</a></li>
+          <li><a class="nav-link scrollto active" href="{{url_for('index')}}">Inicio</a></li>
+          <li><a class="nav-link scrollto" href="{{url_for('publicaciones')}}">Publicaciones</a></li>
+          <li><a href="{{url_for('registrar_trabajo')}}" class="btn btn-primary" role="button" style="color:white;">Registrar</a></li>
+
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
         {% endblock %}

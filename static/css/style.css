@@ -951,6 +951,7 @@ form.search-box .search-form {
 @media (max-width: 767px) {
 	form.search-box .search-form {
 		width: 100%;
+		background-color: transparent ;
 	}
 }
 
@@ -991,4 +992,8 @@ form.search-box .search-form a:hover {
 	form.search-box .search-form a {
 		border-radius: 20px
 	}
+}
+
+.mobile-nav-active {
+    overflow: hidden;
 }
