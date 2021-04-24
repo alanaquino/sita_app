@@ -1,14 +1,45 @@
 {% extends 'base_admin.html' %}
 
 
-{% block title %}Registrar trabajo{% endblock %}
+{% block title %}Trabajos académicos{% endblock %}
 
 {% block main %}
 <div class="container-fluid">
-                        <h1 class="mt-4">Registrar trabajo</h1>
+                        <h1 class="mt-4">Trabajos académicos</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Registrar trabajo</li>
+                            <li class="breadcrumb-item active">Trabajos académicos</li>
                         </ol>
+
+    <table class="table table-bordered table-hover table-striped my-5">
+  <thead class="bg-dark text-white">
+  <tr>
+    <th>ID</th>
+    <th>Descripción</th>
+    <th>Peso</th>
+    <th>Volumen</th>
+    <th>Tracking</th>
+    <th>Estatus</th>
+  </tr>
+  </thead>
+  <tbody>
+   {% for trabajo in trabajos %}
+  <tr>
+    <td> {{ trabajo['id_trabajo'] }} </td>
+    <td> {{ trabajo['titulo_trabajo'] }} </td>
+    <td> {{ trabajo['fecha_publicacion'] }} </td>
+    <td> {{ trabajo['id_nivel_trabajo'] }} </td>
+    <td> {{ trabajo['id_tipo_trabajo'] }} </td>
+    <td> {{ trabajo['id_recinto'] }} </td>
+    <td> {{ trabajo['id_facultad'] }} </td>
+    <td> {{ trabajo['id_escuela'] }} </td>
+    <td> {{ trabajo['id_carrera'] }} </td>
+    <td><a class="btn btn-primary" href="/estatus/{{  paquete['id_paquete']  }}" role="button">Ver</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+  <p class="mt-5">{{ paquetes|length }}  registros encontrados</p>
 
 </div>
 

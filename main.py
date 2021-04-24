@@ -75,9 +75,9 @@ def ver_trabajos():
         # User is loggedin show them the admin page
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM paquetes WHERE id_usuario = %s', (session['id_usuario'],))
-        paquetes = cursor.fetchall()
-        return render_template('ver_trabajos.html', nombre=session['nombre'], paquetes=paquetes)
+        cursor.execute('select * from Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera')
+        trabajos = cursor.fetchall()
+        return render_template('ver_trabajos.html', nombre=session['nombre'], apellidos=session['apellidos'], trabajos=trabajos)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -100,19 +100,31 @@ def ver_trabajo(id_trabajo):
 
 @app.route('/registrar_trabajo')
 def registrar_trabajo():
-    return render_template('registrar_trabajo.html')
+    if 'loggedin' in session:
+        return render_template('registrar_trabajo.html')
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route('/ver_escuelas')
 def ver_escuelas():
-    return render_template('ver_escuelas.html')
+    if 'loggedin' in session:
+        return render_template('ver_escuelas.html')
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route('/ver_carreras')
 def ver_carreras():
-    return render_template('ver_carreras.html')
+    if 'loggedin' in session:
+        return render_template('ver_carreras.html')
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route('/ver_usuarios')
 def ver_usuarios():
-    return render_template('ver_usuarios.html')
+    if 'loggedin' in session:
+        return render_template('ver_usuarios.html')
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 @app.route('/perfil')

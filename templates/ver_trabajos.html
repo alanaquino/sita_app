@@ -1,15 +1,68 @@
 {% extends 'base_admin.html' %}
 
 
-{% block title %}Registrar trabajo{% endblock %}
+{% block title %}Trabajos académicos{% endblock %}
 
 {% block main %}
 <div class="container-fluid">
-                        <h1 class="mt-4">Registrar trabajo</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Registrar trabajo</li>
-                        </ol>
+  <h1 class="mt-4">Trabajos académicos</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Trabajos académicos</li>
+  </ol>
 
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table mr-1"></i>
+      DataTable Example
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+          <tr>
+            <th>Titulo</th>
+            <th>Fecha</th>
+            <th>Nivel</th>
+            <th>Tipo</th>
+            <th>Recinto</th>
+            <th>Facultad</th>
+            <th>Escuela</th>
+            <th>Carrera</th>
+            <th>Ver</th>
+          </tr>
+          </thead>
+          <tfoot>
+          <tr>
+            <th>Titulo</th>
+            <th>Fecha</th>
+            <th>Nivel</th>
+            <th>Tipo</th>
+            <th>Recinto</th>
+            <th>Facultad</th>
+            <th>Escuela</th>
+            <th>Carrera</th>
+            <th>Ver</th>
+          </tr>
+          </tfoot>
+          <tbody>
+          {% for trabajo in trabajos %}
+          <tr>
+            <td> {{ trabajo['titulo_trabajo'] }}</td>
+            <td> {{ trabajo['fecha_publicacion'] }}</td>
+            <td> {{ trabajo['descripcion_nivel'] }}</td>
+            <td> {{ trabajo['descripcion_tipo'] }}</td>
+            <td> {{ trabajo['nombre_recinto'] }}</td>
+            <td> {{ trabajo['nombre_facultad'] }}</td>
+            <td> {{ trabajo['nombre_escuela'] }}</td>
+            <td> {{ trabajo['nombre_carrera'] }}</td>
+            <td><a class="btn btn-primary" href="/ver_trabajo/{{  trabajo['id_trabajo']  }}" role="button">Ver</a></td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
