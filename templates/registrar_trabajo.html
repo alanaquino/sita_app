@@ -4,13 +4,397 @@
 {% block title %}Registrar trabajo{% endblock %}
 
 {% block main %}
+<h1 class="mt-4"></h1>
 <div class="container-fluid">
-                        <h1 class="mt-4">Registrar trabajo</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Registrar trabajo</li>
-                        </ol>
+    <div class="card mb-4">
+        <img class="card-img-top" src="static/img/sita-bg.png" alt="Logo SiTA">
+    </div>
+    <h1 class="mt-4"></h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Registrar trabajo</li>
+    </ol>
+
+    <div class="contenido-pagina">
+
+        <form action="" method="POST">
+
+            <div class="tab">
+                <h2 style="margin-bottom: 2.5rem;">Trabajo académico</h2>
+                <div class="form-group">
+                    <label for="titulo" class="font-weight-bold">Título</label>
+                    <input type="text" class="form-control" id="titulo" placeholder="Escriba el titulo del trabajo académico">
+                    <div class="invalid-feedback">You must agree before submitting.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="extracto" class="font-weight-bold mt-4">Extracto (opcional)</label>
+                    <p>Escriba el resumen de su trabajo académico, facilitará la busqueda del mismo.</p>
+                    <textarea rows="4" cols="79" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_trabajo_academico" class="font-weight-bold mt-4">Tipo de trabajo académico</label>
+                    <select class="form-control" id="tipo_trabajo_academico">
+                        <option disabled selected>Seleccione...</option>
+                        <option>Tesis</option>
+                        <option>Monografico</option>
+                    </select>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="nivel_trabajo_academico" class="font-weight-bold mt-4">Nivel de trabajo académico</label>
+                    <select class="form-control" id="nivel_trabajo_academico" name="nivel_trabajo_academico">
+                        <option disabled selected>Seleccione...</option>
+                        <option>Grado</option>
+                        <option>Postgrado</option>
+                        <option>Técnico</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_publicacion" class="font-weight-bold mt-2">Fecha de publicacion</label>
+                    <input type="date" name="fecha_publicacion" id="fecha_publicacion" class="form-control">
+                    <div class="invalid-feedback">You must agree before submitting.</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="recinto_universitario" class="font-weight-bold mt-4">Recinto universitario</label>
+                    <select class="form-control" id="recinto_universitario" name="recinto_universitario">
+                        <option disabled selected>Seleccione...</option>
+                        <option>Opción</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="facultad" class="font-weight-bold mt-4">Facultad</label>
+                    <select class="form-control" id="facultad" name="facultad">
+                        <option disabled selected>Seleccione...</option>
+                        <option>Grado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="escuela" class="font-weight-bold mt-4">Escuela</label>
+                    <select class="form-control" id="escuela" name="escuela">
+                        <option disabled selected>Seleccione...</option>
+                        <option>Grado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="carrera" class="font-weight-bold mt-4">Carrera</label>
+                    <select class="form-control" id="carrera" name="carrera">
+                        <option disabled selected>Seleccione...</option>
+                        <option>Grado</option>
+                    </select>
+                </div>
+
+
+
+            </div>
+
+        <div class="tab">
+            <h2 style="margin-bottom: 2.5rem;">Estudiantes</h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombres</th>
+                        <th scope="col">Apellidos</th>
+                        <th scope="col">Matricula</th>
+                        <th>Operaciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Juan Jose</td>
+                        <td>Perez De los Santos</td>
+                        <td>100554489</td>
+                        <td>
+                            <a class="btn btn-warning btn-sm" href="">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a class="btn btn-danger  btn-sm" href="">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>100345765</td>
+                        <td>
+                            <a class="btn btn-warning btn-sm" href="">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a class="btn btn-danger btn-sm" href="">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>100455889</td>
+                        <td>
+                            <a class="btn btn-warning btn-sm" href="">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a class="btn btn-danger btn-sm" href="">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-primary mt-2 btnAgregarNuevo" data-toggle="modal"
+                    data-target="#modalEstudiantes">
+                <i class="fas fa-user-plus"></i> Agregar nuevo
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalEstudiantes" tabindex="-1" role="dialog" aria-labelledby="modalEstudianteslLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEstudiantesLabel">Agregar sustentante</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="">
+                                <label for="nombres">Nombres</label>
+                                <input type="text" class="form-control">
+                                <label for="Apellidos">Apellidos</label>
+                                <input type="text" class="form-control">
+                                <label for="matricula">Matricula</label>
+                                <input type="text" class="form-control">
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btnModalAgregar">Agregar <i class="fas fa-check"></i></button>
+                            <button type="button" class="btn btn-outline-danger btnModalCancelar" data-dismiss="modal">Cancelar <i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab">
+            <h2 style="margin-bottom: 2.5rem;">Asesores</h2>
+
+          <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nombres</th>
+                  <th scope="col">Apellidos</th>
+                  <th scope="col">Operaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Juan Jose</td>
+                  <td>Perez De los Santos</td>
+                  <td>
+                    <a class="btn btn-warning btn-sm" href="">
+                      <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a class="btn btn-danger btn-sm" href="">
+                      <i class="fas fa-trash-alt"></i> Eliminar
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                  <td>Thornton</td>
+                  <td>
+                    <a class="btn btn-warning btn-sm" href="">
+                      <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a class="btn btn-danger btn-sm" href="">
+                      <i class="fas fa-trash-alt"></i> Eliminar
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Larry</td>
+                  <td>the Bird</td>
+                  <td>
+                    <a class="btn btn-warning btn-sm" href="">
+                      <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a class="btn btn-danger btn-sm" href="">
+                      <i class="fas fa-trash-alt"></i> Eliminar
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-primary mt-2 btnAgregarNuevo" data-toggle="modal"
+                    data-target="#modalAsesores">
+                <i class="fas fa-user-plus"></i> Agregar nuevo
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalAsesores" tabindex="-1" role="dialog" aria-labelledby="modalAsesoresLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalAsesoresLabel">Agregar sustentante</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="">
+                                <label for="nombres">Nombres</label>
+                                <input type="text" class="form-control">
+                                <label for="Apellidos">Apellidos</label>
+                                <input type="text" class="form-control">
+                                <label for="matricula">Matricula</label>
+                                <input type="text" class="form-control">
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btnModalAgregar">Agregar <i class="fas fa-check"></i></button>
+                            <button type="button" class="btn btn-outline-danger btnModalCancelar" data-dismiss="modal">Cancelar <i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+            <div style="overflow:auto;">
+                <div style="float:left; margin-top: 20px;">
+                    <button class="btn btn-outline-secondary btnVolver" type="button" id="prevBtn" onclick="nextPrev(-1)"><i class="fas fa-arrow-left"></i> Volver</button>
+                    <button class="btn btn-primary" type="button" id="nextBtn" onclick="nextPrev(1)">Continuar <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Circles which indicates the steps of the form: -->
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+            </div>
+        </form>
+    </div>
+
 
 </div>
+
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+
+<script>
+var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the current tab
+
+function showTab(n) {
+  // This function will display the specified tab of the form ...
+  var x = document.getElementsByClassName("tab");
+  x[n].style.display = "block";
+  // ... and fix the Previous/Next buttons:
+  if (n == 0) {
+    document.getElementById("prevBtn").style.display = "none";
+  } else {
+    document.getElementById("prevBtn").style.display = "inline";
+  }
+  if (n == (x.length - 1)) {
+    document.getElementById("nextBtn").innerHTML = "Publicar <i class='fas fa-check'>";
+    document.getElementById("nextBtn").classList.remove("btn-primary");
+    document.getElementById("nextBtn").classList.add("btn-success");
+  } else {
+    document.getElementById("nextBtn").innerHTML = "Siguiente <i class='fas fa-arrow-right'>";
+  }
+  // ... and run a function that displays the correct step indicator:
+  fixStepIndicator(n)
+}
+
+function nextPrev(n) {
+  // This function will figure out which tab to display
+  var x = document.getElementsByClassName("tab");
+  // Exit the function if any field in the current tab is invalid:
+  if (n == 1 && !validateForm()) return false;
+  // Hide the current tab:
+  x[currentTab].style.display = "none";
+  // Increase or decrease the current tab by 1:
+  currentTab = currentTab + n;
+  // if you have reached the end of the form... :
+  if (currentTab >= x.length) {
+    //...the form gets submitted:
+    document.getElementById("regForm").submit();
+    return false;
+  }
+  // Otherwise, display the correct tab:
+  showTab(currentTab);
+}
+
+function validateForm() {
+  // This function deals with validation of the form fields
+  var x, y, i, valid = true;
+  x = document.getElementsByClassName("tab");
+  y = x[currentTab].getElementsByTagName("input");
+  // A loop that checks every input field in the current tab:
+  for (i = 0; i < y.length; i++) {
+    // If a field is empty...
+    if (y[i].value == "") {
+      // add an "invalid" class to the field:
+      y[i].className += " is-invalid";
+      // and set the current valid status to false:
+      valid = false;
+    }
+  }
+  // If the valid status is true, mark the step as finished and valid:
+  if (valid) {
+    document.getElementsByClassName("step")[currentTab].className += " finish";
+  }
+  return valid; // return the valid status
+}
+
+function fixStepIndicator(n) {
+  // This function removes the "active" class of all steps...
+  var i, x = document.getElementsByClassName("step");
+  for (i = 0; i < x.length; i++) {
+    x[i].className = x[i].className.replace(" active", "");
+  }
+  //... and adds the "active" class to the current step:
+  x[n].className += " active";
+}
+</script>
+
+<script type="application/javascript">
+    $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        $('.custom-file-label').html(fileName);
+    });
+</script>
+
 
 {% endblock %}
 

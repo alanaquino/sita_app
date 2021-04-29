@@ -18,15 +18,48 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera LIMIT 3')
+    trabajos = cursor.fetchall()
+    cursor2.execute(
+        'SELECT * FROM Estudiante')
+    estudiantes = cursor2.fetchall()
+    return render_template('index.html', trabajos=trabajos, estudiantes=estudiantes)
+
 
 @app.route('/publicaciones')
 def publicaciones():
-    return render_template('buscar.html')
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera')
+    trabajos = cursor.fetchall()
+    cursor2.execute(
+        'SELECT * FROM Estudiante')
+    estudiantes = cursor2.fetchall()
+    return render_template('publicaciones.html', trabajos=trabajos, estudiantes=estudiantes)
 
-@app.route('/single')
-def single():
-    return render_template('single.html')
+@app.route('/buscar', methods=['GET', 'POST'])
+def buscar():
+    if request.method == "POST":
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.executemany('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE titulo_trabajo LIKE %s', request.form['search'])
+        return render_template("buscar.html", trabajos=cursor.fetchall())
+    return render_template('publicaciones.html')
+
+
+@app.route('/ver_publicacion/<id_trabajo>')
+def publicacion(id_trabajo):
+    id_trabajo = id_trabajo
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+    'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE id_trabajo  = %s',
+    (id_trabajo,))
+    trabajo = cursor.fetchone()
+    return render_template('ver_publicacion.html', trabajo=trabajo)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,6 +91,7 @@ def login():
     # Show the login form with message (if any)
     return render_template('login.html', msg=msg)
 
+
 # this will be the admin page, only accessible for loggedin users
 @app.route('/admin')
 def admin():
@@ -68,6 +102,7 @@ def admin():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 @app.route('/ver_trabajos')
 def ver_trabajos():
     # Check if user is loggedin
@@ -75,13 +110,20 @@ def ver_trabajos():
         # User is loggedin show them the admin page
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('select * from Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera')
+        cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera')
         trabajos = cursor.fetchall()
-        return render_template('ver_trabajos.html', nombre=session['nombre'], apellidos=session['apellidos'], trabajos=trabajos)
+        cursor2.execute(
+            'SELECT * FROM Estudiante')
+        estudiantes = cursor2.fetchall()
+        return render_template('ver_trabajos.html', nombre=session['nombre'], apellidos=session['apellidos'],
+                               trabajos=trabajos, estudiantes=estudiantes)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-@app.route('/ver_trabajo/<id_trabajo>')
+
+@app.route("/ver_trabajo/<id_trabajo>")
 def ver_trabajo(id_trabajo):
     id_trabajo = id_trabajo
     # Check if user is loggedin
@@ -89,21 +131,22 @@ def ver_trabajo(id_trabajo):
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            'SELECT descripcion_estatus, fecha_entrada FROM estatus INNER JOIN paquetes ON paquetes.id_paquete = estatus.id_paquete WHERE paquetes.id_paquete  = %s ORDER BY id_estatus DESC',
+            'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE id_trabajo  = %s',
             (id_trabajo,))
-        paquete_estatus = cursor.fetchall()
+        trabajo = cursor.fetchone()
         # Show the profile page with account info
-        return render_template("ver_trabajo.html", nombre=session['nombre'], id_trabajo=id_trabajo,
-                               paquete_estatus=paquete_estatus)
+        return render_template("ver_trabajo.html", nombre=session['nombre'], apellidos=session['apellidos'], trabajo=trabajo)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
 
 @app.route('/registrar_trabajo')
 def registrar_trabajo():
     if 'loggedin' in session:
-        return render_template('registrar_trabajo.html')
+        return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
 
 @app.route('/ver_escuelas')
 def ver_escuelas():
@@ -112,12 +155,20 @@ def ver_escuelas():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 @app.route('/ver_carreras')
 def ver_carreras():
     if 'loggedin' in session:
-        return render_template('ver_carreras.html')
+        # We need all the account info for the user so we can display it on the profile page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE id_trabajo  = 1')
+        trabajo = cursor.fetchone()
+        # Show the profile page with account info
+        return render_template("ver_carreras.html", nombre=session['nombre'], apellidos=session['apellidos'], trabajo=trabajo)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
 
 @app.route('/ver_usuarios')
 def ver_usuarios():
@@ -140,18 +191,19 @@ def perfil():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-   session.pop('loggedin', None)
-   session.pop('id_usuario', None)
-   session.pop('username', None)
-   session.pop('nombre', None)
-   session.pop('apellidos', None)
-   # Redirect to login page
-   return redirect(url_for('index'))
+    session.pop('loggedin', None)
+    session.pop('id_usuario', None)
+    session.pop('username', None)
+    session.pop('nombre', None)
+    session.pop('apellidos', None)
+    # Redirect to login page
+    return redirect(url_for('index'))
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-	app.run(debug=True)
+    app.run(debug=True)

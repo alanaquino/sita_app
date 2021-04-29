@@ -474,7 +474,7 @@ mark,
 }
 
 .img-fluid {
-  max-width: 100%;
+  max-width: 85%;
   height: auto;
 }
 
@@ -7765,7 +7765,7 @@ button.bg-dark:focus {
 
 .pt-5,
 .py-5 {
-  padding-top: 3rem !important;
+  padding-top: 1.6rem  !important;
 }
 
 .pr-5,
@@ -10094,7 +10094,7 @@ body {
   z-index: 1038;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav {
-  padding-top: 56px;
+  padding-top: 76px;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu {
   overflow-y: auto;
@@ -10223,6 +10223,7 @@ body {
   background-color: #f8f9fa;
   color: #212529;
   box-shadow: 10px 0 15px -2px #88888821;
+  border: 1px solid rgba(0, 0, 0, 0.125);
 }
 .sb-sidenav-light .sb-sidenav-menu .sb-sidenav-menu-heading {
   color: #adb5bd;
@@ -10256,4 +10257,88 @@ body {
   font-weight: 400;
   letter-spacing: 3px;
   text-transform: uppercase;
+}
+
+
+.contenido-pagina{
+  margin-left: 150px;
+  margin-right: 180px;
+}
+@media only screen and (max-width: 600px) {
+  .contenido-pagina{
+  margin-left: 5px;
+  margin-right: 5px;
+  }
+}
+
+.btnVolver{
+  margin-right: 20px;
+}
+
+.botones{
+  margin-bottom: 100px;
+  margin-top: 30px;
+}
+
+.titulos-sidebar {
+  font-size: 18px;
+
+}
+
+.btnAgregarNuevo{
+  margin-bottom: 140px;
+}
+
+.btnModalCancelar{
+  padding: 8px 60px;
+}
+
+.btnModalAgregar{
+  margin-right: 60px;
+  padding: 8px 60px;
+}
+
+.icono-dashboard{
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+   border-color: red;
+}
+
+input.is-invalid {
+   border-color: red;
+}
+
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+}
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+  margin-bottom: 20px;
+}
+
+/* Mark the active step: */
+.step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #4CAF50;
 }

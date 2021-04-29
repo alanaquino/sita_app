@@ -1,5 +1,5 @@
 /**
-* Template Name: NewBiz - v4.0.1
+* Template Name: NewBiz - v4.1.0
 * Template URL: https://bootstrapmade.com/newbiz-bootstrap-business-template/
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
