@@ -1,7 +1,7 @@
 {% extends 'base_admin.html' %}
 
 
-{% block title %}Registrar trabajo{% endblock %}
+{% block title %}Escuelas{% endblock %}
 
 {% block main %}
 <h1 class="mt-4"></h1>
@@ -9,12 +9,39 @@
   <div class="card mb-4">
     <img class="card-img-top" src="static/img/sita-bg.png" alt="Logo SiTA">
   </div>
-                        <h1 class="mt-4"></h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Escuelas</li>
-                        </ol>
+  <h1 class="mt-4"></h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{{url_for('admin')}}">Inicio</a></li>
+    <li class="breadcrumb-item active">Escuelas</li>
+  </ol>
 
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+          <tr>
+              <th>id Escuela</th>
+              <th>Nombre</th>
+              <th>Facultad</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for escuela in escuelas %}
+            <tr>
+              <td> {{ escuela ['id_escuela'] }}</td>
+              <td> {{ escuela['nombre_escuela'] }}</td>
+              <td> {{ escuela['nombre_facultad'] }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 {% endblock %}
 

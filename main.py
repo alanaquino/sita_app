@@ -163,7 +163,10 @@ def registrar_trabajo():
 @app.route('/ver_escuelas')
 def ver_escuelas():
     if 'loggedin' in session:
-        return render_template('ver_escuelas.html')
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM Escuela inner join Facultad WHERE Escuela.id_facultad = Facultad.id_facultad')
+        escuelas = cursor.fetchall()
+        return render_template('ver_escuelas.html', nombre=session['nombre'], apellidos=session['apellidos'], escuelas=escuelas)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -173,7 +176,7 @@ def ver_carreras():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Carrera')
+        cursor.execute('SELECT * FROM Carrera inner join Escuela WHERE Carrera.id_escuela = Escuela.id_escuela')
         carreras = cursor.fetchall()
         # Show the profile page with account info
         return render_template("ver_carreras.html", nombre=session['nombre'], apellidos=session['apellidos'], carreras=carreras)
@@ -184,7 +187,10 @@ def ver_carreras():
 @app.route('/ver_usuarios')
 def ver_usuarios():
     if 'loggedin' in session:
-        return render_template('ver_usuarios.html')
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("SELECT * FROM Cuenta_Usuario INNER JOIN Recinto WHERE Cuenta_Usuario.id_recinto = Recinto.id_recinto")
+        usuarios = cursor.fetchall()
+        return render_template('ver_usuarios.html', nombre=session['nombre'], apellidos=session['apellidos'], usuarios=usuarios)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
