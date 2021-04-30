@@ -64,7 +64,9 @@
                     <label for="recinto_universitario" class="font-weight-bold mt-4">Recinto universitario</label>
                     <select class="form-control" id="recinto_universitario" name="recinto_universitario">
                         <option disabled selected>Seleccione...</option>
-                        <option>Opción</option>
+                        {% for recinto in recintos %}
+                            <option value={{ recinto['id_recinto'] }}> {{ recinto['nombre_recinto'] }} </option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -72,7 +74,9 @@
                     <label for="facultad" class="font-weight-bold mt-4">Facultad</label>
                     <select class="form-control" id="facultad" name="facultad">
                         <option disabled selected>Seleccione...</option>
-                        <option>Grado</option>
+                        {% for facultad in facultades %}
+                            <option value={{ facultad['id_facultad'] }}> {{ facultad['nombre_facultad'] }} </option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -80,7 +84,13 @@
                     <label for="escuela" class="font-weight-bold mt-4">Escuela</label>
                     <select class="form-control" id="escuela" name="escuela">
                         <option disabled selected>Seleccione...</option>
-                        <option>Grado</option>
+                        {% for facultad in facultades %}
+                             {% for escuela in escuelass %}
+                                {% if escuela['id_facultad'] == facultad['id_facultad']%}
+                                    <option value={{ escuela['id_escuela'] }}> {{ escuela['nombre_escuela'] }} </option>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -88,7 +98,9 @@
                     <label for="carrera" class="font-weight-bold mt-4">Carrera</label>
                     <select class="form-control" id="carrera" name="carrera">
                         <option disabled selected>Seleccione...</option>
-                        <option>Grado</option>
+                        {% for carrera in carreras %}
+                            <option value={{ carrera['id_carrera'] }}> {{ carrera['nombre_carrera'] }} </option>
+                        {% endfor %}
                     </select>
                 </div>
 

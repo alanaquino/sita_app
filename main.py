@@ -16,7 +16,7 @@ app.config['MYSQL_DB'] = 'rotary40_uasd'
 mysql = MySQL(app)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -26,6 +26,8 @@ def index():
     cursor2.execute(
         'SELECT * FROM Estudiante')
     estudiantes = cursor2.fetchall()
+
+
     return render_template('index.html', trabajos=trabajos, estudiantes=estudiantes)
 
 
@@ -43,10 +45,11 @@ def publicaciones():
 
 @app.route('/buscar', methods=['GET', 'POST'])
 def buscar():
-    if request.method == "POST":
+    if request.method == "POST" and request['search'] != "":
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.executemany('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE titulo_trabajo LIKE %s', request.form['search'])
-        return render_template("buscar.html", trabajos=cursor.fetchall())
+        cursor.executemany('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE titulo_trabajo LIKE %s', request['search'])
+        datosBuscados = cursor.fetchall()
+        return render_template("buscar.html", trabajos=datosBuscados)
     return render_template('publicaciones.html')
 
 
@@ -143,7 +146,16 @@ def ver_trabajo(id_trabajo):
 @app.route('/registrar_trabajo')
 def registrar_trabajo():
     if 'loggedin' in session:
-        return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],)
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM Recinto')
+        recintos = cursor.fetchall()
+        cursor.execute("SELECT * FROM Facultad")
+        facultades = cursor.fetchall()
+        cursor.execute('SELECT * FROM Escuela ')
+        escuelass = cursor.fetchall()
+        cursor.execute('SELECT * FROM Carrera')
+        carreras = cursor.fetchall()
+        return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'], recintos=recintos, facultades=facultades, escuelass=escuelass, carreras=carreras)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -161,11 +173,10 @@ def ver_carreras():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute(
-            'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE id_trabajo  = 1')
-        trabajo = cursor.fetchone()
+        cursor.execute('SELECT * FROM Carrera')
+        carreras = cursor.fetchall()
         # Show the profile page with account info
-        return render_template("ver_carreras.html", nombre=session['nombre'], apellidos=session['apellidos'], trabajo=trabajo)
+        return render_template("ver_carreras.html", nombre=session['nombre'], apellidos=session['apellidos'], carreras=carreras)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
