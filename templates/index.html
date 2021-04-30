@@ -3,6 +3,13 @@
 
 {% block title %}Home{% endblock %}
 
+{% block navbar %}
+{{ super() }}
+ <li><a class="nav-link scrollto active" href="{{url_for('index')}}">Inicio</a></li>
+ <li><a class="nav-link scrollto" href="{{url_for('publicaciones')}}">Publicaciones</a></li>
+{% endblock %}
+
+
 {% block container %}
 
 <!-- ======= Hero Section ======= -->
@@ -17,7 +24,7 @@
          <!-- form -->
          <form action="/buscar" class="search-box" method=post>
             <div class="input-form">
-               <input type="text" name="search" placeholder="Trabajo académico a buscar..." value="{{ request.form.search}}">
+               <input type="text" name="search" id="search" placeholder="Trabajo académico a buscar..." value="{{ request.form.search}}" required>
             </div>
             <div class="select-form">
                <div class="select-itms">
@@ -32,11 +39,6 @@
                <input type=submit class="text-decoration-none" value="Search">Buscar</input>
             </div>
          </form>
-          {% for message in get_flashed_messages() %}
-          <div class=flash>
-              {{ message }}
-          </div>
-          {% endfor %}
          <div class="logo" data-aos="fade-up" data-aos-delay="300">
             <img src="{{ url_for('static', filename='img/logo_uasd_blanco.svg') }}" alt="" class="img-fluid" style="margin-top: 8%;">
          </div>
@@ -85,7 +87,7 @@
                 </div>
                 {% endfor %}
                <div style="text-align: center">
-                  <a class="btn btn-primary btn-block" style="text-align:center;" href="#" role="button">Ver más publicaciones</a>
+                  <a class="btn btn-primary btn-block" style="text-align:center;" href="{{url_for('publicaciones')}}" role="button">Ver más publicaciones</a>
                </div>
           </div>
    </div>

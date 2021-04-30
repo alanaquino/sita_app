@@ -47,17 +47,16 @@
         </div>
 
         <nav id="navbar" class="navbar">
-            {% block navbar %}
             <ul>
-                <li><a class="nav-link scrollto active" href="{{url_for('index')}}">Inicio</a></li>
-                <li><a class="nav-link scrollto" href="{{url_for('publicaciones')}}">Publicaciones</a></li>
+                {% block navbar %}
+                {% endblock %}
                 <li>
-                    <button id="calltoaction" class="btn btn-primary" onclick="relocate_home()"><i class="fas fa-plus"></i>&nbsp;Registrar
+                    <button id="calltoaction" class="btn btn-primary" onclick="relocate_home()">
+                        <i class="fas fa-plus"></i>&nbsp;Registrar
                     </button>
                 </li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
-            {% endblock %}
         </nav><!-- .navbar -->
 
     </div>
