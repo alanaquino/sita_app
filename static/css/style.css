@@ -1063,3 +1063,8 @@ form.search-box .search-form input:hover {
  .elBorde:hover {
     border-left-color: #f0ad4e;
  }
+
+.ver_todo{
+    color: #fff;
+    margin-left: 20px;
+}

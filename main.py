@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, json, jsonify
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
@@ -12,6 +12,7 @@ app.config['MYSQL_HOST'] = '50.87.151.191'
 app.config['MYSQL_USER'] = 'rotary40_uasd'
 app.config['MYSQL_PASSWORD'] = 'FE7Elmxa*)y&'
 app.config['MYSQL_DB'] = 'rotary40_uasd'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
@@ -138,7 +139,7 @@ def ver_trabajo(id_trabajo):
     return redirect(url_for('login'))
 
 
-@app.route('/registrar_trabajo')
+@app.route('/registrar_trabajo', methods=['GET', 'POST'])
 def registrar_trabajo():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -146,13 +147,35 @@ def registrar_trabajo():
         recintos = cursor.fetchall()
         cursor.execute("SELECT * FROM Facultad")
         facultades = cursor.fetchall()
-        cursor.execute('SELECT * FROM Escuela ')
-        escuelass = cursor.fetchall()
-        cursor.execute('SELECT * FROM Carrera')
-        carreras = cursor.fetchall()
-        return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'], recintos=recintos, facultades=facultades, escuelass=escuelass, carreras=carreras)
+        return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'], recintos=recintos, facultades=facultades)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/get_escuelas/<id_facultad>')
+def get_escuelas(id_facultad):
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        result = cur.execute("SELECT * FROM Escuela WHERE id_facultad = %s", [id_facultad])
+        escuelas = cur.fetchall()
+        escuelaArray = []
+        for escuela in escuelas:
+            escuelaObj = {
+                'id_escuela': escuela['id_escuela'],
+                'nombre_escuela': escuela['nombre_escuela']}
+            escuelaArray.append(escuelaObj)
+        return jsonify({'facultad_escuela': escuelaArray})
+
+@app.route('/get_carreras/<id_escuela>')
+def get_carreras(id_escuela):
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        result = cur.execute("SELECT * FROM Carrera WHERE id_escuela = %s", [id_escuela])
+        carreras = cur.fetchall()
+        carreraArray = []
+        for carrera in carreras:
+            carreraObj = {
+                'id_carrera': carrera['id_carrera'],
+                'nombre_carrera': carrera['nombre_carrera']}
+            carreraArray.append(carreraObj)
+        return jsonify({'listacarreras': carreraArray})
 
 
 @app.route('/ver_escuelas')

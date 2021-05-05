@@ -3,6 +3,13 @@
 
 {% block title %}Registrar trabajo{% endblock %}
 
+{% block head %}
+{{ super() }}
+
+
+{% endblock %}
+
+
 {% block main %}
 <h1 class="mt-4"></h1>
 <div class="container-fluid">
@@ -16,9 +23,9 @@
 
     <div class="contenido-pagina">
 
-        <form action="" method="POST">
+        <form action="#" name="form" id="form" method="POST">
 
-            <div class="tab">
+        <div class="tab">
                 <h2 style="margin-bottom: 2.5rem;">Trabajo académico</h2>
                 <div class="form-group">
                     <label for="titulo" class="font-weight-bold">Título</label>
@@ -65,7 +72,7 @@
                     <select class="form-control" id="recinto_universitario" name="recinto_universitario">
                         <option disabled selected>Seleccione...</option>
                         {% for recinto in recintos %}
-                            <option value={{ recinto['id_recinto'] }}> {{ recinto['nombre_recinto'] }} </option>
+                            <option value="{{ recinto['id_recinto'] }}"> {{ recinto['nombre_recinto'] }} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -75,7 +82,7 @@
                     <select class="form-control" id="facultad" name="facultad">
                         <option disabled selected>Seleccione...</option>
                         {% for facultad in facultades %}
-                            <option value={{ facultad['id_facultad'] }}> {{ facultad['nombre_facultad'] }} </option>
+                            <option value="{{ facultad['id_facultad'] }}">{{ facultad['nombre_facultad'] }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -83,126 +90,43 @@
                 <div class="form-group">
                     <label for="escuela" class="font-weight-bold mt-4">Escuela</label>
                     <select class="form-control" id="escuela" name="escuela">
-                        <option disabled selected>Seleccione...</option>
-                        {% for facultad in facultades %}
-                             {% for escuela in escuelass %}
-                                {% if escuela['id_facultad'] == facultad['id_facultad']%}
-                                    <option value={{ escuela['id_escuela'] }}> {{ escuela['nombre_escuela'] }} </option>
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
+                        <option disabled selected>...</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="carrera" class="font-weight-bold mt-4">Carrera</label>
                     <select class="form-control" id="carrera" name="carrera">
-                        <option disabled selected>Seleccione...</option>
-                        {% for carrera in carreras %}
-                            <option value={{ carrera['id_carrera'] }}> {{ carrera['nombre_carrera'] }} </option>
-                        {% endfor %}
+                        <option disabled selected>...</option>
                     </select>
                 </div>
-
-
-
-            </div>
+       </div>
 
         <div class="tab">
             <h2 style="margin-bottom: 2.5rem;">Estudiantes</h2>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nombres</th>
-                        <th scope="col">Apellidos</th>
-                        <th scope="col">Matricula</th>
-                        <th>Operaciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Juan Jose</td>
-                        <td>Perez De los Santos</td>
-                        <td>100554489</td>
-                        <td>
-                            <a class="btn btn-warning btn-sm" href="">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-                            <a class="btn btn-danger  btn-sm" href="">
-                                <i class="fas fa-trash-alt"></i> Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>100345765</td>
-                        <td>
-                            <a class="btn btn-warning btn-sm" href="">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-                            <a class="btn btn-danger btn-sm" href="">
-                                <i class="fas fa-trash-alt"></i> Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>100455889</td>
-                        <td>
-                            <a class="btn btn-warning btn-sm" href="">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-                            <a class="btn btn-danger btn-sm" href="">
-                                <i class="fas fa-trash-alt"></i> Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-outline-primary mt-2 btnAgregarNuevo" data-toggle="modal"
-                    data-target="#modalEstudiantes">
+            <div id="InputsWrapper">
+                <div class="form-row" style="margin-bottom: 10px;">
+                    <div class="col">
+                        <input type="text" name="skill[]" placeholder="Nombre" class="form-control name_list">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Apellidos">
+                    </div>
+                    <div class="col col-3">
+                        <input type="text" class="form-control" placeholder="Matrícula">
+                    </div>
+                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" disabled><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-primary mt-2 btnAgregarNuevo btn-block" name="add" id="AddMoreFileBox">
                 <i class="fas fa-user-plus"></i> Agregar nuevo
             </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="modalEstudiantes" tabindex="-1" role="dialog" aria-labelledby="modalEstudianteslLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalEstudiantesLabel">Agregar sustentante</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form action="">
-                                <label for="nombres">Nombres</label>
-                                <input type="text" class="form-control">
-                                <label for="Apellidos">Apellidos</label>
-                                <input type="text" class="form-control">
-                                <label for="matricula">Matricula</label>
-                                <input type="text" class="form-control">
-                            </form>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary btnModalAgregar">Agregar <i class="fas fa-check"></i></button>
-                            <button type="button" class="btn btn-outline-danger btnModalCancelar" data-dismiss="modal">Cancelar <i class="fas fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+
+
         <div class="tab">
             <h2 style="margin-bottom: 2.5rem;">Asesores</h2>
 
@@ -296,7 +220,6 @@
             </div>
 
 
-
         </div>
 
             <div style="overflow:auto;">
@@ -322,6 +245,13 @@
 
 {% block js %}
 {{ super() }}
+
+<script type="application/javascript">
+    $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        $('.custom-file-label').html(fileName);
+    });
+</script>
 
 <script>
 var currentTab = 0; // Current tab is set to be the first tab (0)
@@ -400,11 +330,80 @@ function fixStepIndicator(n) {
 }
 </script>
 
-<script type="application/javascript">
-    $('input[type="file"]').change(function(e){
-        var fileName = e.target.files[0].name;
-        $('.custom-file-label').html(fileName);
-    });
+<script>
+facultad_select = document.getElementById('facultad');
+escuela_select = document.getElementById('escuela');
+carrera_select = document.getElementById('carrera');
+
+facultad_select.onchange = function(){
+ facultad = facultad_select.value;
+ fetch('get_escuelas/' + facultad).then(function(response){
+  response.json().then(function(data) {
+   optionHTML = '';
+   for (escuela of data.facultad_escuela) {
+    optionHTML += '<option value="' + escuela.id_escuela +'">' + escuela.nombre_escuela + '</option>'
+   }
+   escuela_select.innerHTML = optionHTML;
+  });
+ });
+}
+escuela_select.onchange = function(){
+ escuela = escuela_select.value;
+ fetch('get_carreras/' + escuela).then(function(response){
+  response.json().then(function(data) {
+   optionHTML = '';
+   for (carrera of data.listacarreras) {
+    optionHTML += '<option value="' + carrera.id_carrera +'">' + carrera.nombre_carrera + '</option>'
+   }
+   carrera_select.innerHTML = optionHTML;
+  });
+ });
+}
+</script>
+
+<script>
+$(document).ready(function() {
+
+var MaxInputs       = 8; //maximum input boxes allowed
+var InputsWrapper   = $("#InputsWrapper"); //Input boxes wrapper ID
+var AddButton       = $("#AddMoreFileBox"); //Add button ID
+
+var x = InputsWrapper.length; //initlal text box count
+var FieldCount=1; //to keep track of text box added
+
+$(AddButton).click(function (e)  //on add input button click
+{
+        if(x <= MaxInputs) //max input box allowed
+        {
+            FieldCount++; //text box added increment
+            //add input box
+            $(InputsWrapper).append('<div class="form-row" style="margin-bottom: 10px;"> <div class="col"> <input type="text" name="skill[]" placeholder="Nombre" class="form-control name_list"> </div> <div class="col"> <input type="text" class="form-control" placeholder="Apellidos"> </div> <div class="col col-3"> <input type="text" class="form-control" placeholder="Matrícula"> </div> <a href="#" class="btn btn-danger removeclass" style="border-radius: 50%;"><i class="fas fa-times"></i></a> </div>');
+            x++; //text box increment
+
+        }
+return false;
+});
+
+$("body").on("click",".removeclass", function(e){ //user click on remove text
+        if( x > 1 ) {
+                $(this).parent('div').remove(); //remove text box
+                x--; //decrement textbox
+        }
+return false;
+})
+ $('#submit').click(function(){
+           $.ajax({
+                url:"/postskill",
+                method:"POST",
+                data:$('#add_skills').serialize(),
+                success:function(data)
+                {  alert(data)
+                     $('#resultbox').html(data);
+                     $('#add_skills')[0].reset();
+                }
+           });
+      });
+});
 </script>
 
 
