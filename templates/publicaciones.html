@@ -67,7 +67,7 @@
                         </h7>
                         <h7 class="text-capitalize text-primary fw-normal" style="display: inline">
                            &nbsp;&nbsp; <i class="fas fa-calendar-alt"></i>
-                            {{ trabajo['fecha_publicacion'] }}
+                            {{ trabajo['fecha_publicacion'].strftime('%B, %Y') }}
                         </h7>
 
                         <a href="{{ url_for('publicacion', id_trabajo = trabajo['id_trabajo']) }}" class="text-decoration-none text-uppercase">
@@ -81,7 +81,7 @@
                             {{ estudiante['nombres'] }}{{ ", " if not loop.last else "" }}
                         </h7>
                          {% else %}
-                             no true items
+                             No se han registrado sustentantes para este trabajo
                          {% endfor %}
                     </div>
                 </div>

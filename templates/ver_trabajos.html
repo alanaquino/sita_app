@@ -51,7 +51,7 @@
                 {% endfor %}
               </ol>
             </td>
-            <td> {{ trabajo['fecha_publicacion'] }}</td>
+            <td> {{ trabajo['fecha_publicacion'].strftime('%B, %Y') }}</td>
             <td> {{ trabajo['descripcion_tipo'] }}</td>
             <td> {{ trabajo['nombre_recinto'] }}</td>
             <td> {{ trabajo['nombre_facultad'] }}</td>

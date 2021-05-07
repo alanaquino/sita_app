@@ -31,7 +31,7 @@
 
       <h3 class="card-title text-uppercase" style="margin-top: 9px;">{{ trabajo['titulo_trabajo'] }}</h3>
       <h6 class="text-capitalize text-primary fw-normal" style="display: inline">&nbsp;<i
-              class="fas fa-calendar-alt"></i> {{ trabajo['fecha_publicacion'] }}</h6>
+              class="fas fa-calendar-alt"></i> {{ trabajo['fecha_publicacion'].strftime('%B, %Y') }}</h6>
       <hr>
 
       <div class="row">

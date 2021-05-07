@@ -23,28 +23,31 @@
 
     <div class="contenido-pagina">
 
-        <form action="#" name="form" id="form" method="POST">
+        <form action="{{ url_for('registrar_trabajo') }}" method="post" name="add_trabajo" id="add_trabajo">
+
+        <div>
+            <h3 style='color:green;'>{{ msg }}</h3>
+        </div>
 
         <div class="tab">
                 <h2 style="margin-bottom: 2.5rem;">Trabajo académico</h2>
                 <div class="form-group">
                     <label for="titulo" class="font-weight-bold">Título</label>
-                    <input type="text" class="form-control" id="titulo" placeholder="Escriba el titulo del trabajo académico">
-                    <div class="invalid-feedback">You must agree before submitting.</div>
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Escriba el titulo del trabajo académico" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="extracto" class="font-weight-bold mt-4">Extracto (opcional)</label>
+                    <label for="extracto" class="font-weight-bold mt-4">Resumen (opcional)</label>
                     <p>Escriba el resumen de su trabajo académico, facilitará la busqueda del mismo.</p>
-                    <textarea rows="4" cols="79" class="form-control"></textarea>
+                    <textarea id="extracto" name="extracto" rows="2" cols="79" class="form-control"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="tipo_trabajo_academico" class="font-weight-bold mt-4">Tipo de trabajo académico</label>
-                    <select class="form-control" id="tipo_trabajo_academico">
+                    <select class="form-control" id="tipo_trabajo_academico" name="tipo_trabajo_academico">
                         <option disabled selected>Seleccione...</option>
-                        <option>Tesis</option>
-                        <option>Monografico</option>
+                        <option value="1">Tesis</option>
+                        <option value="2">Monografico</option>
                     </select>
                 </div>
 
@@ -54,14 +57,14 @@
                     <label for="nivel_trabajo_academico" class="font-weight-bold mt-4">Nivel de trabajo académico</label>
                     <select class="form-control" id="nivel_trabajo_academico" name="nivel_trabajo_academico">
                         <option disabled selected>Seleccione...</option>
-                        <option>Grado</option>
-                        <option>Postgrado</option>
-                        <option>Técnico</option>
+                        <option value="1">Grado</option>
+                        <option value="2">Postgrado</option>
+                        <option value="3">Técnico</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="fecha_publicacion" class="font-weight-bold mt-2">Fecha de publicacion</label>
+                    <label for="fecha_publicacion" class="font-weight-bold mt-2">Fecha de publicación</label>
                     <input type="date" name="fecha_publicacion" id="fecha_publicacion" class="form-control">
                     <div class="invalid-feedback">You must agree before submitting.</div>
                 </div>
@@ -100,7 +103,9 @@
                         <option disabled selected>...</option>
                     </select>
                 </div>
-       </div>
+        </div>
+
+        <div id="resultbox"></div>
 
         <div class="tab">
             <h2 style="margin-bottom: 2.5rem;">Estudiantes</h2>
@@ -108,116 +113,46 @@
             <div id="InputsWrapper">
                 <div class="form-row" style="margin-bottom: 10px;">
                     <div class="col">
-                        <input type="text" name="skill[]" placeholder="Nombre" class="form-control name_list">
+                        <input type="text" name="nombres_estudiantes[]" id="nombre_est_1" class="form-control nombre_list" placeholder="Nombre 1">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Apellidos">
+                        <input type="text" name="apellidos_estudiantes[]" id="apellido_est_1" class="form-control apellido_list" placeholder="Apellidos 1">
                     </div>
                     <div class="col col-3">
-                        <input type="text" class="form-control" placeholder="Matrícula">
+                        <input type="text" name="matricula_estudiantes[]" id="matricula_est_1" class="form-control matricula_list" placeholder="Matrícula 1">
                     </div>
                     <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" disabled><i class="fas fa-times"></i></button>
                 </div>
             </div>
 
             <button type="button" class="btn btn-outline-primary mt-2 btnAgregarNuevo btn-block" name="add" id="AddMoreFileBox">
-                <i class="fas fa-user-plus"></i> Agregar nuevo
+                <i class="fas fa-user-plus"></i> Agregar más
             </button>
 
         </div>
 
 
+
+
         <div class="tab">
             <h2 style="margin-bottom: 2.5rem;">Asesores</h2>
 
-          <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Nombres</th>
-                  <th scope="col">Apellidos</th>
-                  <th scope="col">Operaciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Juan Jose</td>
-                  <td>Perez De los Santos</td>
-                  <td>
-                    <a class="btn btn-warning btn-sm" href="">
-                      <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a class="btn btn-danger btn-sm" href="">
-                      <i class="fas fa-trash-alt"></i> Eliminar
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>
-                    <a class="btn btn-warning btn-sm" href="">
-                      <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a class="btn btn-danger btn-sm" href="">
-                      <i class="fas fa-trash-alt"></i> Eliminar
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>
-                    <a class="btn btn-warning btn-sm" href="">
-                      <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a class="btn btn-danger btn-sm" href="">
-                      <i class="fas fa-trash-alt"></i> Eliminar
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-outline-primary mt-2 btnAgregarNuevo" data-toggle="modal"
-                    data-target="#modalAsesores">
-                <i class="fas fa-user-plus"></i> Agregar nuevo
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="modalAsesores" tabindex="-1" role="dialog" aria-labelledby="modalAsesoresLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalAsesoresLabel">Agregar sustentante</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form action="">
-                                <label for="nombres">Nombres</label>
-                                <input type="text" class="form-control">
-                                <label for="Apellidos">Apellidos</label>
-                                <input type="text" class="form-control">
-                                <label for="matricula">Matricula</label>
-                                <input type="text" class="form-control">
-                            </form>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary btnModalAgregar">Agregar <i class="fas fa-check"></i></button>
-                            <button type="button" class="btn btn-outline-danger btnModalCancelar" data-dismiss="modal">Cancelar <i class="fas fa-times"></i></button>
-                        </div>
+            <div id="InputsWrapper2">
+                <div class="form-row" style="margin-bottom: 10px;">
+                    <div class="col col-3">
+                        <input type="text" name="nombres_asesores[]" id="nombre_as_1" class="form-control nombre_as_list" placeholder="Nombre asesor 1">
                     </div>
+                    <div class="col">
+                        <input type="text" name="apellidos_asesores[]" id="apellido_as_1" class="form-control apellido_as_list" placeholder="Apellidos asesor 1">
+                    </div>
+                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" disabled><i class="fas fa-times"></i></button>
                 </div>
             </div>
+
+            <button type="button" class="btn btn-outline-primary mt-2 btnAgregarNuevo btn-block" name="add_2" id="AddMoreFileBox2">
+                <i class="fas fa-user-plus"></i> Agregar más
+            </button>
 
 
         </div>
@@ -226,6 +161,7 @@
                 <div style="float:left; margin-top: 20px;">
                     <button class="btn btn-outline-secondary btnVolver" type="button" id="prevBtn" onclick="nextPrev(-1)"><i class="fas fa-arrow-left"></i> Volver</button>
                     <button class="btn btn-primary" type="button" id="nextBtn" onclick="nextPrev(1)">Continuar <i class="fas fa-arrow-right"></i></button>
+                    <input class="btn btn-success" type="submit" value="Publicar &#xf00c"  class="fa fa-input" id="nextBtn" onclick="nextPrev(1)">
                 </div>
             </div>
 
@@ -297,28 +233,6 @@ function nextPrev(n) {
   showTab(currentTab);
 }
 
-function validateForm() {
-  // This function deals with validation of the form fields
-  var x, y, i, valid = true;
-  x = document.getElementsByClassName("tab");
-  y = x[currentTab].getElementsByTagName("input");
-  // A loop that checks every input field in the current tab:
-  for (i = 0; i < y.length; i++) {
-    // If a field is empty...
-    if (y[i].value == "") {
-      // add an "invalid" class to the field:
-      y[i].className += " is-invalid";
-      // and set the current valid status to false:
-      valid = false;
-    }
-  }
-  // If the valid status is true, mark the step as finished and valid:
-  if (valid) {
-    document.getElementsByClassName("step")[currentTab].className += " finish";
-  }
-  return valid; // return the valid status
-}
-
 function fixStepIndicator(n) {
   // This function removes the "active" class of all steps...
   var i, x = document.getElementsByClassName("step");
@@ -364,11 +278,14 @@ escuela_select.onchange = function(){
 <script>
 $(document).ready(function() {
 
-var MaxInputs       = 8; //maximum input boxes allowed
+var MaxInputs       = 6; //maximum input boxes allowed
 var InputsWrapper   = $("#InputsWrapper"); //Input boxes wrapper ID
+var InputsWrapper2   = $("#InputsWrapper2"); //Input boxes wrapper ID
 var AddButton       = $("#AddMoreFileBox"); //Add button ID
+var AddButton2       = $("#AddMoreFileBox2"); //Add button ID
 
 var x = InputsWrapper.length; //initlal text box count
+var x2 = InputsWrapper2.length; //initlal text box count
 var FieldCount=1; //to keep track of text box added
 
 $(AddButton).click(function (e)  //on add input button click
@@ -377,8 +294,21 @@ $(AddButton).click(function (e)  //on add input button click
         {
             FieldCount++; //text box added increment
             //add input box
-            $(InputsWrapper).append('<div class="form-row" style="margin-bottom: 10px;"> <div class="col"> <input type="text" name="skill[]" placeholder="Nombre" class="form-control name_list"> </div> <div class="col"> <input type="text" class="form-control" placeholder="Apellidos"> </div> <div class="col col-3"> <input type="text" class="form-control" placeholder="Matrícula"> </div> <a href="#" class="btn btn-danger removeclass" style="border-radius: 50%;"><i class="fas fa-times"></i></a> </div>');
+            $(InputsWrapper).append('<div class="form-row" style="margin-bottom: 10px;"> <div class="col"> <input type="text" name="nombres_estudiantes[]"  class="form-control name_list" placeholder="Nombre '+ FieldCount +'" id="nombre_est_'+ FieldCount +'"> </div> <div class="col"> <input type="text" name="apellidos_estudiantes[]" class="form-control" placeholder="Apellidos '+ FieldCount +'" id="apellidos_est_'+ FieldCount +'"> </div> <div class="col col-3"> <input type="text" name="matricula_estudiantes[]" class="form-control" placeholder="Matrícula '+ FieldCount +'" id="matricula_est_'+ FieldCount +'"> </div> <a href="#" class="btn btn-danger removeclass" style="border-radius: 50%;"><i class="fas fa-times"></i></a> </div>');
             x++; //text box increment
+
+        }
+return false;
+});
+
+$(AddButton2).click(function (e)  //on add input button click
+{
+        if(x2 <= MaxInputs) //max input box allowed
+        {
+            FieldCount++; //text box added increment
+            //add input box
+            $(InputsWrapper2).append('<div class="form-row" style="margin-bottom: 10px;"> <div class="col col-3"> <input type="text" name="nombres_asesores[]" id="nombre_as_'+ FieldCount +'" class="form-control nombre_as_list" placeholder="Nombre asesor '+ FieldCount +'"> </div> <div class="col"> <input type="text" name="apellidos_asesores[]" id="apellido_as_'+ FieldCount +'" class="form-control apellido_as_list" placeholder="Apellidos asesor '+ FieldCount +'"> </div> <button type="button" class="btn btn-danger removeclass2" style="border-radius: 50%;"><i class="fas fa-times"></i></button> </div>');
+            x2++; //text box increment
 
         }
 return false;
@@ -391,15 +321,25 @@ $("body").on("click",".removeclass", function(e){ //user click on remove text
         }
 return false;
 })
- $('#submit').click(function(){
+
+$("body").on("click",".removeclass2", function(e){ //user click on remove text
+        if( x2 > 1 ) {
+                $(this).parent('div').remove(); //remove text box
+                x2--; //decrement textbox
+        }
+return false;
+})
+
+
+$('#submit').click(function(){
            $.ajax({
-                url:"/postskill",
+                url:"/registrar_trabajo",
                 method:"POST",
-                data:$('#add_skills').serialize(),
+                data:$('#add_trabajo').serialize(),
                 success:function(data)
                 {  alert(data)
                      $('#resultbox').html(data);
-                     $('#add_skills')[0].reset();
+                     $('#add_trabajo')[0].reset();
                 }
            });
       });

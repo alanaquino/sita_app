@@ -22,7 +22,7 @@
          <h2>Lorem ipsum dolor sit amet consectetur adipiscing elitqua.</h2>
          <!-- Search Box -->
          <!-- form -->
-         <form action="/buscar" class="search-box" method=post>
+         <form action="/buscar" class="search-box" method="post" style="margin-bottom: 10px;">
             <div class="input-form">
                <input type="text" name="search" id="search" placeholder="Trabajo académico a buscar..." value="{{ request.form.search}}" required>
             </div>
@@ -36,10 +36,10 @@
                </div>
             </div>
             <div class="search-form actions">
-               <input type=submit class="text-decoration-none" value="Search">Buscar</input>
+               <input type=submit class="text-decoration-none" value="Search">Buscar
             </div>
          </form>
-         <a class="ver_todo" href="{{url_for('publicaciones')}}"><i class="fas fa-folder"></i> Ver todos los trabajos publicados</a>
+         <a class="ver_todo" href="{{url_for('publicaciones')}}"><i class="fas fa-plus-circle"></i> Ver todos los trabajos publicados</a>
          <div class="logo" data-aos="fade-up" data-aos-delay="300">
             <img src="{{ url_for('static', filename='img/logo_uasd_blanco.svg') }}" alt="" class="img-fluid" style="margin-top: 8%;">
          </div>
@@ -62,14 +62,14 @@
                             <span class="badge bg-primary text-uppercase">{{ trabajo['descripcion_tipo'] }} de {{ trabajo['descripcion_nivel'] }}</span>
                         </h5>
 
-                        <h7 class="text-capitalize text-primary fw-normal" style="display: inline">
+                        <h6 class="text-capitalize text-primary fw-normal" style="display: inline">
                             &nbsp;&nbsp;<i class="fas fa-building"></i>
                             {{ trabajo['nombre_recinto'] }}
-                        </h7>
-                        <h7 class="text-capitalize text-primary fw-normal" style="display: inline">
+                        </h6>
+                        <h6 class="text-capitalize text-primary fw-normal" style="display: inline">
                            &nbsp;&nbsp; <i class="fas fa-calendar-alt"></i>
-                            {{ trabajo['fecha_publicacion'] }}
-                        </h7>
+                            {{ trabajo['fecha_publicacion'].strftime('%B, %Y') }}
+                        </h6>
 
                         <a href="{{ url_for('publicacion', id_trabajo = trabajo['id_trabajo']) }}" class="text-decoration-none text-uppercase">
                         <h3 class="card-title text-uppercase" style="margin-top: 9px;font-weight: 600; font-size: 1.46rem;">
@@ -78,11 +78,11 @@
                         </a>
                         <i class="fas fa-user-friends"></i>&nbsp;
                          {% for estudiante in estudiantes if estudiante['id_trabajo'] == trabajo['id_trabajo'] %}
-                        <h7 class="text-capitalize text-secondary" style="display: inline;font-weight: 600;">
+                        <h6 class="text-capitalize text-secondary" style="display: inline;font-weight: 600;">
                             {{ estudiante['nombres'] }}{{ ", " if not loop.last else "" }}
-                        </h7>
+                        </h6>
                          {% else %}
-                             no true items
+                             No se han registrado sustentantes para este trabajo
                          {% endfor %}
                     </div>
                 </div>

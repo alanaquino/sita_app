@@ -21,7 +21,7 @@ mysql = MySQL(app)
 def index():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera LIMIT 3')
+    cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC LIMIT 3')
     trabajos = cursor.fetchall()
     cursor2.execute('SELECT * FROM Estudiante')
     estudiantes = cursor2.fetchall()
@@ -32,7 +32,7 @@ def index():
 def publicaciones():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera')
+    cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC')
     trabajos = cursor.fetchall()
     cursor2.execute('SELECT * FROM Estudiante')
     estudiantes = cursor2.fetchall()
@@ -147,9 +147,72 @@ def registrar_trabajo():
         recintos = cursor.fetchall()
         cursor.execute("SELECT * FROM Facultad")
         facultades = cursor.fetchall()
-        return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'], recintos=recintos, facultades=facultades)
+
+        # Output message if something goes wrong...
+        msg = ''
+        nombres_est = ''
+        apellidos_est = ''
+        matricula_est = ''
+        nombres_as = ''
+        apellidos_as = ''
+        i = 0
+        x = 0
+
+        # Si se envía el formulario
+        if request.method == 'POST':
+            titulo_trabajo = request.form['titulo']
+            extracto = request.form['extracto']
+            id_tipo_trabajo = request.form['tipo_trabajo_academico']
+            id_nivel_trabajo = request.form['nivel_trabajo_academico']
+            fecha_publicacion = request.form['fecha_publicacion']
+            id_recinto = request.form['recinto_universitario']
+            id_facultad = request.form['facultad']
+            id_escuela = request.form['escuela']
+            id_carrera = request.form['carrera']
+            registrado_por = session['id_usuario']
+
+            nombres_est = request.form.getlist('nombres_estudiantes[]')
+            apellidos_est = request.form.getlist('apellidos_estudiantes[]')
+            matricula_est = request.form.getlist('matricula_estudiantes[]')
+
+            nombres_as = request.form.getlist('nombres_asesores[]')
+            apellidos_as = request.form.getlist('apellidos_asesores[]')
+
+            cursor.execute(
+                'INSERT INTO Trabajo_Academico (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo,'
+                'fecha_publicacion, id_recinto, id_facultad, id_escuela, id_carrera, registrado_por) '
+                'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo, fecha_publicacion, id_recinto,
+                 id_facultad, id_escuela, id_carrera, registrado_por,))
+            mysql.connection.commit()
+
+            trabajo_est = cursor.lastrowid
+
+            from json import dumps
+
+            while i < len(nombres_est):
+                print(nombres_est[i], apellidos_est[i], matricula_est[i])
+                # print(dumps(nombres_est[i]), dumps(apellidos_est[i]), dumps(matricula_est[i]))
+                sql = "INSERT INTO Estudiante (nombres, apellidos, matricula, id_trabajo) VALUES (%s, %s, %s, %s)"
+                val = (nombres_est[i], apellidos_est[i], matricula_est[i], trabajo_est)
+                cursor.execute(sql, val)
+                mysql.connection.commit()
+                i = i + 1
+
+            while x < len(nombres_as):
+                print(nombres_as[x], apellidos_as[x])
+                sql2 = "INSERT INTO Asesor (nombre, apellidos, id_trabajo) VALUES (%s, %s, %s)"
+                val2 = (apellidos_as[x], apellidos_as[x], trabajo_est)
+                cursor.execute(sql2, val2)
+                mysql.connection.commit()
+                x = x + 1
+
+            msg = "<i class='fas fa-check-circle'></i> !Trabajo registrado exitosamente!"
+        return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],
+                               recintos=recintos, facultades=facultades, msg=msg)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
 
 @app.route('/get_escuelas/<id_facultad>')
 def get_escuelas(id_facultad):
