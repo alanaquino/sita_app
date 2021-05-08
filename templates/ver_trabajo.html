@@ -4,7 +4,7 @@
 {% block title %}Trabajo académico{% endblock %}
 
 {% block main %}
-<div class="container-fluid">
+<div class="container">
 
   <h1 class="mt-4"></h1>
   <ol class="breadcrumb mb-4">
@@ -14,29 +14,142 @@
   </ol>
 
   <div class="card mb-4">
-    <img class="card-img-top" src="{{ url_for('static', filename='img/CI_bg.jpg') }}" alt="Card image cap">
+
+    {% if trabajo['id_facultad'] == 1 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/IN_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 2 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/AG_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 3 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/SA_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 4 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/HU_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 5 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/ES_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 6 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/CI_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 7 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/AR_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 8 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/CE_bg.jpg') }}" alt="Card image cap">
+    {% elif trabajo['id_facultad'] == 9 %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/JU_bg.jpg') }}" alt="Card image cap">
+    {% else %}
+      <img class="card-img-top" src="{{ url_for('static', filename='img/sita-bg.png') }}" alt="Card image cap">
+    {% endif %}
+
     <div class="card-body">
-      <h5 style="display: inline"><span class="badge badge-primary text-uppercase">{{ trabajo['descripcion_tipo'] }} de {{ trabajo['descripcion_nivel'] }}</span></h5>
-      <h6 class="text-capitalize text-primary fw-normal" style="display: inline">&nbsp;<i class="fas fa-building"></i> {{ trabajo['nombre_recinto'] }}</h6>
-
-
-      <h3 class="card-title text-uppercase" style="margin-top: 9px;">{{ trabajo['titulo_trabajo'] }}</h3>
-      <hr>
-
-      <div class="row">
-
-        <div class="col-8">
-          <h6 class="card-text text-secondary">Sustentantes:</h6>
-        </div>
-        <div class="col-4">
-
-        </div>
-      </div>
-
-
+      <h5 style="display: inline">
+        <span class="badge badge-primary text-uppercase">
+        {{ trabajo['descripcion_tipo'] }} de {{ trabajo['descripcion_nivel'] }}
+        </span>
+      </h5>
+      <h6 class="text-capitalize text-primary fw-normal" style="display: inline">&nbsp;
+        <i class="fas fa-building"></i>
+        {{ trabajo['nombre_recinto'] }}
+      </h6>
+      <h3 class="card-title text-uppercase" style="margin-top: 9px;">
+        {{ trabajo['titulo_trabajo'] }}
+      </h3>
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-lg-8 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-weight: 500;color: #0d6efd;">Detalles</h4>
+
+        <table class="table table-borderless">
+          <tbody>
+          <tr>
+            <th scope="row">Recinto:</th>
+            <td>{{ trabajo['nombre_recinto'] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Facultad:</th>
+            <td>{{ trabajo['nombre_facultad'] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Escuela:</th>
+            <td>{{ trabajo['nombre_escuela'] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Carrera:</th>
+            <td>{{ trabajo['nombre_carrera'] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Tipo:</th>
+            <td>{{ trabajo['descripcion_tipo'] }} de {{ trabajo['descripcion_nivel'] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Sustentantes:</th>
+            <td>
+                  {% for estudiante in estudiantes if estudiante['id_trabajo'] == trabajo['id_trabajo'] %}
+                    {% if estudiante['matricula'] is none %}
+                      {{ estudiante['nombres'] }} {{ estudiante['apellidos'] }}{{ ", " if not loop.last else "" }}<br>
+                    {% else %}
+                      {{ estudiante['nombres'] }} {{ estudiante['apellidos'] }} ({{ estudiante['matricula'] }}){{ ", " if not loop.last else "" }}<br>
+                    {%endif %}
+                  {% else %}
+                    No se han registrado sustentantes para este trabajo
+                  {% endfor %}
+            <td>
+          </tr>
+          <tr>
+            <th scope="row">Asesores:</th>
+            <td>
+              {% for asesor in asesores if asesor['id_trabajo'] == trabajo['id_trabajo'] %}
+              {{ asesor['nombres'] }} {{ asesor['apellidos'] }}{{ ", " if not loop.last else "" }}<br>
+              {% else %}
+              No se han registrado asesores para este trabajo
+              {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Award date:</th>
+            <td>{{ trabajo['fecha_publicacion'].strftime('%B, %Y') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Ubicación:</th>
+            <td>{{ trabajo['ubicacion_recinto'] }}</td>
+          </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-weight: 500;color: #0d6efd;">Información adicional</h4>
+          <h6 style="font-weight: bold;margin-top: 25px;">Documentos & Links:</h6>
+          <a href="#">
+            <i class="fas fa-paperclip"></i> andreas_berger_hjortholt
+          </a>
+          <h6 style="font-weight: bold;margin-top: 25px;">Registrado el:</h6>
+          <p class="card-text">{{ trabajo['fecha_registro_sistema'].strftime('%d %B, %Y') }}</p>
+          <h6 style="font-weight: bold;margin-top: 25px;">Registrado por:</h6>
+          <p class="card-text">{{ trabajo['nombre'] }} {{ trabajo['apellidos'] }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-weight: 500;color: #0d6efd;">Resumen</h4>
+          <p class="card-text">
+              {% if trabajo['extracto'] is none %}
+                No se ha escrito un resumen para este trabajo académico.
+              {% else %}
+                {{ trabajo['extracto'] }}
+              {%endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

@@ -1661,6 +1661,7 @@ pre code {
   padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
+  padding-left: 2px;
 }
 .table thead th {
   vertical-align: bottom;
@@ -10341,4 +10342,8 @@ input.is-invalid {
 /* Mark the steps that are finished and valid: */
 .step.finish {
   background-color: #4CAF50;
+}
+
+.fa-input {
+  font-family: FontAwesome, ‘Helvetica Neue’, Helvetica, Arial, sans-serif;
 }
