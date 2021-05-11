@@ -286,10 +286,10 @@ def perfil():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Cuenta_Usuario WHERE id_usuario = %s', (session['id_usuario'],))
-        account = cursor.fetchone()
+        cursor.execute('SELECT * FROM Cuenta_Usuario INNER JOIN Recinto ON Cuenta_Usuario.id_recinto = Recinto.id_recinto WHERE id_usuario = %s', (session['id_usuario'],))
+        usuarios = cursor.fetchall()
         # Show the profile page with account info
-        return render_template('perfil.html', account=account)
+        return render_template('perfil.html', usuarios=usuarios)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

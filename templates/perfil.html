@@ -5,11 +5,19 @@
 
 {% block main %}
 <div class="container-fluid">
-                        <h1 class="mt-4">Registrar trabajo</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Registrar trabajo</li>
-                        </ol>
-
+    <ol class="breadcrumb my-5">
+        <li class="breadcrumb-item active">Datos del usuario</li>
+    </ol>
+    <div class="text-center">
+        <i class="fas fa-user-tie text-dark mb-3" style="font-size: 9rem;"></i>
+    </div>
+    {% for usuario in usuarios %}
+        <p class="lead text-center"><span class="font-weight-bold">Nombre:</span> {{ usuario['nombre'] }}</p>
+        <p class="lead text-center"><span class="font-weight-bold">Apellidos:</span> {{ usuario['apellidos'] }}</p>
+        <p class="lead text-center"><span class="font-weight-bold">Nombre de usuario:</span> {{ usuario['username'] }}</p>
+        <p class="lead text-center"><span class="font-weight-bold">Fecha de registro:</span> {{ usuario['fecha_registro'] }}</p>
+        <p class="lead text-center"><span class="font-weight-bold">Recinto:</span> {{ usuario['nombre_recinto'] }}</p>
+    {% endfor %}
 </div>
 
 {% endblock %}

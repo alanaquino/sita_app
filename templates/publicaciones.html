@@ -54,6 +54,12 @@
              </div>
             <div class="col-sm-9">
 
+                <select class="mb-4" id="comboEscuela">
+                    <option>Escuela</option>
+                    <option>administracion</option>
+                    <option>Contabilidad</option>
+                </select>
+
                 {% for trabajo in trabajos %}
                 <div class="card mb-4">
                     <div class="card-body elBorde" style="padding-left: 25px;">
@@ -93,3 +99,12 @@
 
 
 {% endblock %}
+
+
+
+<script>
+    let comboEscuela = document.getElementById("comboEscuela");
+    comboEscuela.onchange = function(){
+        alert("Hola");
+    }
+</script>
