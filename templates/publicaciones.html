@@ -4,6 +4,7 @@
 
 {% block navbar %}
 {{ super() }}
+
  <li><a class="nav-link scrollto" href="{{url_for('index')}}">Inicio</a></li>
  <li><a class="nav-link scrollto active" href="{{url_for('publicaciones')}}">Publicaciones</a></li>
 {% endblock %}
@@ -54,11 +55,14 @@
              </div>
             <div class="col-sm-9">
 
-                <select class="mb-4" id="comboEscuela">
-                    <option>Escuela</option>
-                    <option>administracion</option>
-                    <option>Contabilidad</option>
-                </select>
+                <form action="/publicaciones" method="post" id="frmComboEscuela"></form>
+                    <select class="mb-4" id="comboEscuela" name="comboEscuela">
+                        <option value="">--Seleccione--</option>
+                        {% for escuela in escuelas %}
+                            <option value="{{ escuela['id_escuela'] }}"> {{ escuela['nombre_escuela'] }} </option>
+                        {% endfor %}
+                    </select>
+                </form>
 
                 {% for trabajo in trabajos %}
                 <div class="card mb-4">
@@ -101,10 +105,15 @@
 {% endblock %}
 
 
+{% block js %}
+    {{ super() }}
 
-<script>
-    let comboEscuela = document.getElementById("comboEscuela");
-    comboEscuela.onchange = function(){
-        alert("Hola");
-    }
-</script>
+    <script>
+        let frmComboEscuela = document.getElementById("frmComboEscuela");
+
+        let comboEscuela = document.getElementById("comboEscuela");
+        comboEscuela.onchange = function(){
+            frmComboEscuela.submit();
+        }
+    </script>
+{% endblock %}
