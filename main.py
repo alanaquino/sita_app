@@ -1,11 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, Blueprint, g, current_app
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
-from flask_paginate import Pagination, get_page_args
-import click
 import re
 
-click.disable_unicode_literals_warning = True
 
 # Create the application.
 app = Flask(__name__)
