@@ -40,7 +40,9 @@ def publicaciones():
     trabajos = cursor.fetchall()
     cursor.execute('SELECT * FROM Estudiante')
     estudiantes = cursor.fetchall()
-    return render_template('publicaciones.html', trabajos=trabajos, estudiantes=estudiantes, total=total)
+    cursor.execute('SELECT Facultad.nombre_facultad as Facultad, COUNT(Trabajo_Academico.id_facultad) as Total FROM Trabajo_Academico INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad GROUP BY Facultad.id_facultad ORDER BY COUNT(Trabajo_Academico.id_facultad) DESC')
+    estadisticas = cursor.fetchall()
+    return render_template('publicaciones.html', trabajos=trabajos, estudiantes=estudiantes, total=total, estadisticas=estadisticas)
 
 
 @app.route('/buscar', methods=['GET', 'POST'])
@@ -48,12 +50,18 @@ def buscar():
     if request.method == 'POST' and 'search' in request.form:
         search_term = request.form.get("search")
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        query2 = "SELECT COUNT(*) FROM Trabajo_Academico WHERE titulo_trabajo LIKE '%{}%'".format(search_term)
+        cursor.execute(query2)
+        total = cursor.fetchone()
         query = "SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE titulo_trabajo LIKE '%{}%'".format(search_term)
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.execute('SELECT * FROM Estudiante')
         estudiantes = cursor.fetchall()
-        return render_template("buscar.html", trabajos=result, estudiantes=estudiantes)
+        cursor.execute(
+            'SELECT Facultad.nombre_facultad as Facultad, COUNT(Trabajo_Academico.id_facultad) as Total FROM Trabajo_Academico INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad GROUP BY Facultad.id_facultad ORDER BY COUNT(Trabajo_Academico.id_facultad) DESC')
+        estadisticas = cursor.fetchall()
+        return render_template("buscar.html", trabajos=result, estudiantes=estudiantes, estadisticas=estadisticas, total=total, search_term=search_term)
     else:
         return render_template("publicaciones.html")
 
