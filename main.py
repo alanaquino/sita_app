@@ -31,19 +31,15 @@ def index():
 def publicaciones():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    if request.method == 'POST' and 'comboEscuela' in request.form:
-       id_escuela = request.form['comboEscuela']
-       cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = %s INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC', id_escuela)
-       trabajos = cursor.fetchall()
-    else:
-        cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC')
-        trabajos = cursor.fetchall()
+    cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC')
+    trabajos = cursor.fetchall()
 
     cursor.execute('SELECT * FROM Estudiante')
     estudiantes = cursor.fetchall()
     cursor.execute('SELECT * FROM Escuela')
     escuelas = cursor.fetchall()
     return render_template('publicaciones.html', trabajos=trabajos, estudiantes=estudiantes, escuelas=escuelas)
+
 
 @app.route('/buscar', methods=['GET', 'POST'])
 def buscar():

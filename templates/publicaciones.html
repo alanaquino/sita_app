@@ -55,15 +55,6 @@
              </div>
             <div class="col-sm-9">
 
-                <form action="/publicaciones" method="post" id="frmComboEscuela"></form>
-                    <select class="mb-4" id="comboEscuela" name="comboEscuela">
-                        <option value="">--Seleccione--</option>
-                        {% for escuela in escuelas %}
-                            <option value="{{ escuela['id_escuela'] }}"> {{ escuela['nombre_escuela'] }} </option>
-                        {% endfor %}
-                    </select>
-                </form>
-
                 {% for trabajo in trabajos %}
                 <div class="card mb-4">
                     <div class="card-body elBorde" style="padding-left: 25px;">
@@ -105,15 +96,4 @@
 {% endblock %}
 
 
-{% block js %}
-    {{ super() }}
 
-    <script>
-        let frmComboEscuela = document.getElementById("frmComboEscuela");
-
-        let comboEscuela = document.getElementById("comboEscuela");
-        comboEscuela.onchange = function(){
-            frmComboEscuela.submit();
-        }
-    </script>
-{% endblock %}
