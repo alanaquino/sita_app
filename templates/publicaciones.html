@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Buscar{% endblock %}
+{% block title %}Publicaciones{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link href="{{ url_for('static', filename='css/jquery.paginate.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block navbar %}
 {{ super() }}
@@ -54,7 +59,7 @@
                  </ol>
              </div>
             <div class="col-sm-9">
-
+                     <div id="trabajos_pg">
                 {% for trabajo in trabajos %}
                 <div class="card mb-4">
                     <div class="card-body elBorde" style="padding-left: 25px;">
@@ -84,15 +89,28 @@
                          {% else %}
                              No se han registrado sustentantes para este trabajo
                          {% endfor %}
+
                     </div>
                 </div>
                 {% endfor %}
+                 </div>
+                 Se encontraron un total de {{ total['COUNT(*)'] }} resultados
             </div>
         </div>
       </div>
     </section>
 
+{% endblock %}
 
+{% block js %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/jquery.paginate.js') }}"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#trabajos_pg').paginate({itemsPerPage: 6});
+});
+</script>
 {% endblock %}
 
 

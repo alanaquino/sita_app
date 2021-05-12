@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, session, json, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, Blueprint, g, current_app
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 
+
 # Create the application.
 app = Flask(__name__)
+
 
 app.secret_key = 'your secret key'
 
@@ -27,18 +29,16 @@ def index():
     return render_template('index.html', trabajos=trabajos, estudiantes=estudiantes)
 
 
-@app.route('/publicaciones', methods=['GET', 'POST'])
+@app.route('/publicaciones')
 def publicaciones():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
+    cursor.execute('SELECT COUNT(*) FROM Trabajo_Academico')
+    total = cursor.fetchone()
     cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC')
     trabajos = cursor.fetchall()
-
     cursor.execute('SELECT * FROM Estudiante')
     estudiantes = cursor.fetchall()
-    cursor.execute('SELECT * FROM Escuela')
-    escuelas = cursor.fetchall()
-    return render_template('publicaciones.html', trabajos=trabajos, estudiantes=estudiantes, escuelas=escuelas)
+    return render_template('publicaciones.html', trabajos=trabajos, estudiantes=estudiantes, total=total)
 
 
 @app.route('/buscar', methods=['GET', 'POST'])
@@ -150,6 +150,7 @@ def ver_trabajo(id_trabajo):
 
 @app.route('/registrar_trabajo', methods=['GET', 'POST'])
 def registrar_trabajo():
+
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM Recinto')
@@ -157,7 +158,6 @@ def registrar_trabajo():
         cursor.execute("SELECT * FROM Facultad")
         facultades = cursor.fetchall()
 
-        # Output message if something goes wrong...
         msg = ''
         nombres_est = ''
         apellidos_est = ''
@@ -179,11 +179,11 @@ def registrar_trabajo():
             id_escuela = request.form['escuela']
             id_carrera = request.form['carrera']
             registrado_por = session['id_usuario']
-
+            # Obtiene los datos de los estudiantes ingresados
             nombres_est = request.form.getlist('nombres_estudiantes[]')
             apellidos_est = request.form.getlist('apellidos_estudiantes[]')
             matricula_est = request.form.getlist('matricula_estudiantes[]')
-
+            # Obtiene los datos de los asesores ingresados
             nombres_as = request.form.getlist('nombres_asesores[]')
             apellidos_as = request.form.getlist('apellidos_asesores[]')
 
@@ -195,9 +195,8 @@ def registrar_trabajo():
                  id_facultad, id_escuela, id_carrera, registrado_por,))
             mysql.connection.commit()
 
+            # Obtiene el ID del trabajo registrado para asignaselo a los estudiantes y asesores
             trabajo_est = cursor.lastrowid
-
-            from json import dumps
 
             while i < len(nombres_est):
                 print(nombres_est[i], apellidos_est[i], matricula_est[i])
@@ -217,6 +216,7 @@ def registrar_trabajo():
                 x = x + 1
 
             msg = "<i class='fas fa-check-circle'></i> !Trabajo registrado exitosamente!"
+
         return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],
                                recintos=recintos, facultades=facultades, msg=msg)
     # User is not loggedin redirect to login page
@@ -291,10 +291,10 @@ def perfil():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Cuenta_Usuario INNER JOIN Recinto ON Cuenta_Usuario.id_recinto = Recinto.id_recinto WHERE id_usuario = %s', (session['id_usuario'],))
-        usuarios = cursor.fetchall()
+        cursor.execute('SELECT * FROM Cuenta_Usuario WHERE id_usuario = %s', (session['id_usuario'],))
+        account = cursor.fetchone()
         # Show the profile page with account info
-        return render_template('perfil.html', usuarios=usuarios)
+        return render_template('perfil.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
