@@ -46,8 +46,8 @@
                  </ol>
              </div>
             <div class="col-sm-9">
+              <h4>Existen {{ total['COUNT(*)'] }} trabajos académicos publicados</h4>
                <div id="trabajos_pg">
-                <h4>Existen {{ total['COUNT(*)'] }} trabajos académicos publicados</h4>
                 {% for trabajo in trabajos %}
                 <div class="card mb-4">
                     <div class="card-body elBorde" style="padding-left: 25px;">
@@ -95,7 +95,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#trabajos_pg').paginate({itemsPerPage: 6});
+	$('#trabajos_pg').paginate({itemsPerPage: 3});
 });
 </script>
 {% endblock %}

@@ -129,7 +129,7 @@ def ver_trabajos():
         # User is loggedin show them the admin page
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera')
+        cursor.execute('SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC')
         trabajos = cursor.fetchall()
         cursor.execute('SELECT * FROM Estudiante')
         estudiantes = cursor.fetchall()
@@ -307,10 +307,10 @@ def perfil():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Cuenta_Usuario WHERE id_usuario = %s', (session['id_usuario'],))
-        account = cursor.fetchone()
+        cursor.execute('SELECT * FROM Cuenta_Usuario INNER JOIN Recinto ON Cuenta_Usuario.id_recinto = Recinto.id_recinto WHERE id_usuario = %s', (session['id_usuario'],))
+        usuarios = cursor.fetchall()
         # Show the profile page with account info
-        return render_template('perfil.html', account=account)
+        return render_template('perfil.html', usuarios=usuarios)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
