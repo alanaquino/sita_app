@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, Blueprint, g, current_app
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
+import os
 import re
 
 
@@ -15,6 +16,7 @@ app.config['MYSQL_USER'] = 'rotary40_uasd'
 app.config['MYSQL_PASSWORD'] = 'FE7Elmxa*)y&'
 app.config['MYSQL_DB'] = 'rotary40_uasd'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['UPLOAD_PATH'] = 'uploads'
 
 mysql = MySQL(app)
 
@@ -179,6 +181,8 @@ def registrar_trabajo():
             id_escuela = request.form['escuela']
             id_carrera = request.form['carrera']
             registrado_por = session['id_usuario']
+            uploaded_file = request.files['archivo']
+
             # Obtiene los datos de los estudiantes ingresados
             nombres_est = request.form.getlist('nombres_estudiantes[]')
             apellidos_est = request.form.getlist('apellidos_estudiantes[]')
@@ -187,12 +191,16 @@ def registrar_trabajo():
             nombres_as = request.form.getlist('nombres_asesores[]')
             apellidos_as = request.form.getlist('apellidos_asesores[]')
 
+            # guarda el archivo adjunto
+            if uploaded_file.filename != '':
+                uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename))
+
             cursor.execute(
                 'INSERT INTO Trabajo_Academico (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo,'
-                'fecha_publicacion, id_recinto, id_facultad, id_escuela, id_carrera, registrado_por) '
-                'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                'fecha_publicacion, id_recinto, id_facultad, id_escuela, id_carrera, registrado_por, archivo_adjunto) '
+                'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                 (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo, fecha_publicacion, id_recinto,
-                 id_facultad, id_escuela, id_carrera, registrado_por,))
+                 id_facultad, id_escuela, id_carrera, registrado_por, uploaded_file.filename,))
             mysql.connection.commit()
 
             # Obtiene el ID del trabajo registrado para asignaselo a los estudiantes y asesores
@@ -210,12 +218,12 @@ def registrar_trabajo():
             while x < len(nombres_as):
                 print(nombres_as[x], apellidos_as[x])
                 sql2 = "INSERT INTO Asesor (nombre, apellidos, id_trabajo) VALUES (%s, %s, %s)"
-                val2 = (apellidos_as[x], apellidos_as[x], trabajo_est)
+                val2 = (nombres_as[x], apellidos_as[x], trabajo_est)
                 cursor.execute(sql2, val2)
                 mysql.connection.commit()
                 x = x + 1
 
-            msg = "<i class='fas fa-check-circle'></i> !Trabajo registrado exitosamente!"
+            msg = "😊 !Trabajo registrado exitosamente!"
 
         return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],
                                recintos=recintos, facultades=facultades, msg=msg)

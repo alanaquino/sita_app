@@ -116,7 +116,7 @@
                 <th scope="row">Asesores:</th>
                 <td>
                   {% for asesor in asesores if asesor['id_trabajo'] == trabajo['id_trabajo'] %}
-                  {{ asesor['nombres'] }} {{ asesor['apellidos'] }}{{ ", " if not loop.last else "" }}<br>
+                  {{ asesor['nombre'] }} {{ asesor['apellidos'] }}{{ ", " if not loop.last else "" }}<br>
                   {% else %}
                   No se han registrado asesores para este trabajo
                   {% endfor %}
@@ -143,9 +143,13 @@
           <div class="card-body">
             <h4 class="card-title" style="font-weight: 500;color: #0d6efd;">Información adicional</h4>
             <h6 style="font-weight: bold;margin-top: 25px;margin-bottom: 5px;">Documentos & Links:</h6>
-            <a href="#">
-              <i class="fas fa-paperclip"></i> andreas_berger_hjortholt
-            </a>
+              {% if trabajo['archivo_adjunto'] is none %}
+                No se han cargado documentos a este trabajo académico.
+              {% else %}
+                <a href="#">
+                   <i class="fas fa-paperclip"></i> {{ trabajo['archivo_adjunto'] }}
+                </a>
+              {%endif %}
             <h6 style="font-weight: bold;margin-top: 25px;margin-bottom: 5px;">Registrado el:</h6>
             <p class="card-text">{{ trabajo['fecha_registro_sistema'].strftime('%d %B, %Y') }}</p>
           </div>

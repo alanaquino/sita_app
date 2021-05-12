@@ -23,7 +23,7 @@
 
     <div class="contenido-pagina">
 
-        <form action="{{ url_for('registrar_trabajo') }}" method="post" name="add_trabajo" id="add_trabajo">
+        <form action="{{ url_for('registrar_trabajo') }}" method="post" name="add_trabajo" id="add_trabajo" enctype="multipart/form-data">
 
         <div>
             <h3 style='color:green;'>{{ msg }}</h3>
@@ -44,7 +44,7 @@
 
                 <div class="form-group">
                     <label for="tipo_trabajo_academico" class="font-weight-bold mt-4">Tipo de trabajo académico</label>
-                    <select class="form-control" id="tipo_trabajo_academico" name="tipo_trabajo_academico">
+                    <select class="form-control" id="tipo_trabajo_academico" name="tipo_trabajo_academico" required>
                         <option disabled selected>Seleccione...</option>
                         <option value="1">Tesis</option>
                         <option value="2">Monografico</option>
@@ -55,7 +55,7 @@
 
                 <div class="form-group">
                     <label for="nivel_trabajo_academico" class="font-weight-bold mt-4">Nivel de trabajo académico</label>
-                    <select class="form-control" id="nivel_trabajo_academico" name="nivel_trabajo_academico">
+                    <select class="form-control" id="nivel_trabajo_academico" name="nivel_trabajo_academico" required>
                         <option disabled selected>Seleccione...</option>
                         <option value="1">Grado</option>
                         <option value="2">Postgrado</option>
@@ -65,14 +65,13 @@
 
                 <div class="form-group">
                     <label for="fecha_publicacion" class="font-weight-bold mt-2">Fecha de publicación</label>
-                    <input type="date" name="fecha_publicacion" id="fecha_publicacion" class="form-control">
-                    <div class="invalid-feedback">You must agree before submitting.</div>
+                    <input type="date" name="fecha_publicacion" id="fecha_publicacion" class="form-control" required>
                 </div>
 
 
                 <div class="form-group">
                     <label for="recinto_universitario" class="font-weight-bold mt-4">Recinto universitario</label>
-                    <select class="form-control" id="recinto_universitario" name="recinto_universitario">
+                    <select class="form-control" id="recinto_universitario" name="recinto_universitario" required>
                         <option disabled selected>Seleccione...</option>
                         {% for recinto in recintos %}
                             <option value="{{ recinto['id_recinto'] }}"> {{ recinto['nombre_recinto'] }} </option>
@@ -82,7 +81,7 @@
 
                 <div class="form-group">
                     <label for="facultad" class="font-weight-bold mt-4">Facultad</label>
-                    <select class="form-control" id="facultad" name="facultad">
+                    <select class="form-control" id="facultad" name="facultad" required>
                         <option disabled selected>Seleccione...</option>
                         {% for facultad in facultades %}
                             <option value="{{ facultad['id_facultad'] }}">{{ facultad['nombre_facultad'] }}</option>
@@ -92,17 +91,26 @@
 
                 <div class="form-group">
                     <label for="escuela" class="font-weight-bold mt-4">Escuela</label>
-                    <select class="form-control" id="escuela" name="escuela">
+                    <select class="form-control" id="escuela" name="escuela" required>
                         <option disabled selected>...</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="carrera" class="font-weight-bold mt-4">Carrera</label>
-                    <select class="form-control" id="carrera" name="carrera">
+                    <select class="form-control" id="carrera" name="carrera" required>
                         <option disabled selected>...</option>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="archivo" class="font-weight-bold mt-4">Archivo adjunto *(Opcional)</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="archivo" name="archivo" accept=".doc,.docx,.pdf" required>
+                        <label class="custom-file-label" for="archivo">Subir el archivo de su trabajo académico...</label>
+                    </div>
+                </div>
+
         </div>
 
         <div id="resultbox"></div>
@@ -247,7 +255,7 @@ function validateForm() {
       // add an "invalid" class to the field:
       y[i].className += " invalid";
       // and set the current valid status to false:
-      valid = false;
+      valid = true;
     }
   }
   // If the valid status is true, mark the step as finished and valid:
