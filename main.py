@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, Blueprint, g, current_app
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import os
-import re
 
 # Create the application.
 app = Flask(__name__)
