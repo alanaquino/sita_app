@@ -127,7 +127,7 @@
               {% if trabajo['archivo_adjunto'] is none %}
                 No se han cargado documentos a este trabajo académico.
               {% else %}
-                <a href="/uploads/{{ trabajo['archivo_adjunto'] }}">
+                <a href="{{ url_for('static', filename='uploads/' + trabajo['archivo_adjunto']) }}">
                    <i class="fas fa-paperclip"></i> {{ trabajo['archivo_adjunto'] }}
                 </a>
               {%endif %}

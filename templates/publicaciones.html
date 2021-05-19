@@ -5,6 +5,15 @@
 {% block head %}
 {{ super() }}
 <link href="{{ url_for('static', filename='css/jquery.paginate.css') }}" rel="stylesheet">
+
+<style type="text/css">
+a.disabled {
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+</style>
+
 {% endblock %}
 
 {% block navbar %}
@@ -34,56 +43,60 @@
       <div class="container">
         <div class="row">
              <div class="col-sm-3">
-                 <ol class="list-group">
-                     {% for estadistica in estadisticas %}
-                     <li class="list-group-item d-flex justify-content-between align-items-start">
-                         <div class="ms-2 me-auto">
-                             <div class="fw-bold">{{ estadistica['Facultad'] }}</div>
-                         </div>
-                         <span class="badge bg-primary rounded-pill">{{ estadistica['Total'] }}</span>
-                     </li>
-                     {% endfor %}
-                 </ol>
+                 <h4>Filtrar resultados:</h4>
+                 <div class="input-group" style="margin-bottom: 10px;" data-aos="fade-up" data-aos-delay="100">
+                    <input class="form-control" id="myInput" type="text" placeholder="¿Qué deseas filtrar?..."> </input>
+                 </div>
+                 <div id="myBtnContainer" style="margin-bottom: 20px;" data-aos="fade-up" data-aos-delay="200">
+                         <button type="button" class="active btn btn-sm btn-outline-primary" id="all">Todos los niveles</button>
+                         <button type="button" class="btn btn-sm btn-outline-primary" id="Grado">Grado</button>
+                         <button type="button" class="btn btn-sm btn-outline-primary" id="Postgrado">Postgrado</button>
+                 </div>
              </div>
+
             <div class="col-sm-9">
-              <h4>Existen {{ total['COUNT(*)'] }} trabajos académicos publicados</h4>
-               <div id="trabajos_pg">
-                {% for trabajo in trabajos %}
-                <div class="card mb-4">
-                    <div class="card-body elBorde" style="padding-left: 25px;">
-                        <h5 style="display: inline">
-                            <span class="badge bg-primary text-uppercase">{{ trabajo['descripcion_tipo'] }} de {{ trabajo['descripcion_nivel'] }}</span>
-                        </h5>
-
-                        <h7 class="text-capitalize text-primary fw-normal" style="display: inline">
-                            &nbsp;&nbsp;<i class="fas fa-building"></i>
-                            {{ trabajo['nombre_recinto'] }}
-                        </h7>
-                        <h7 class="text-capitalize text-primary fw-normal" style="display: inline">
-                           &nbsp;&nbsp; <i class="fas fa-calendar-alt"></i>
-                            {{ trabajo['fecha_publicacion'].strftime('%B, %Y') }}
-                        </h7>
-
-                        <a href="{{ url_for('publicacion', id_trabajo = trabajo['id_trabajo']) }}" class="text-decoration-none text-uppercase">
-                        <h3 class="card-title text-uppercase" style="margin-top: 9px;font-weight: 600; font-size: 1.46rem;">
-                            {{ trabajo['titulo_trabajo'] }}
-                        </h3>
-                        </a>
-                        <i class="fas fa-user-friends"></i>&nbsp;
-                         {% for estudiante in estudiantes if estudiante['id_trabajo'] == trabajo['id_trabajo'] %}
-                        <h7 class="text-capitalize text-secondary" style="display: inline;font-weight: 600;">
-                            {{ estudiante['nombres'] }}{{ ", " if not loop.last else "" }}
-                        </h7>
-                         {% else %}
-                             No se han registrado sustentantes para este trabajo
-                         {% endfor %}
-
+                <h4>Existen <b>{{ total['COUNT(*)'] }}</b> trabajos académicos publicados</h4>
+                <div id="trabajos_pg" data-aos="fade-up" data-aos-delay="100">
+                    {% for trabajo in trabajos %}
+                    <div class="card mb-4 {{ trabajo['descripcion_nivel'] }}">
+                        <div class="card-body elBorde" style="padding-left: 25px;">
+                            <h5 style="display: inline">
+                                <span class="badge bg-primary text-uppercase">{{ trabajo['descripcion_tipo'] }} de {{ trabajo['descripcion_nivel'] }}</span>
+                            </h5>
+                            <h6 class="text-capitalize text-primary fw-normal" style="display: inline">
+                                &nbsp;&nbsp;<i class="fas fa-building"></i>
+                                {{ trabajo['nombre_recinto'] }}
+                            </h6>
+                            <h6 class="text-capitalize text-primary fw-normal" style="display: inline">
+                                &nbsp;&nbsp; <i class="fas fa-calendar-alt"></i>
+                                {{ trabajo['fecha_publicacion'].strftime('%B, %Y') }}
+                            </h6>
+                            <a href="{{ url_for('publicacion', id_trabajo = trabajo['id_trabajo']) }}"
+                               class="text-decoration-none text-uppercase">
+                                <h3 class="card-title text-uppercase"
+                                    style="margin-top: 9px;font-weight: 600; font-size: 1.46rem;">
+                                    {{ trabajo['titulo_trabajo'] }}
+                                </h3>
+                            </a>
+                            <i class="fas fa-user-friends"></i>&nbsp;
+                            {% for estudiante in estudiantes if estudiante['id_trabajo'] == trabajo['id_trabajo'] %}
+                            <h6 class="text-capitalize text-secondary" style="display: inline;font-weight: 600;">
+                                {{ estudiante['nombres'] }}{{ ", " if not loop.last else "" }}
+                            </h6>
+                            {% else %}
+                            No se han registrado sustentantes para este trabajo
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-               </div>
+                <div id="listitems-pagination" style="display:none">
+                    <a id="listitems-previous" href="#" class="disabled">&laquo; Previous</a>
+                    <a id="listitems-next" href="#">Next &raquo;</a>
+                </div>
             </div>
         </div>
+
       </div>
     </section>
 
@@ -95,9 +108,34 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#trabajos_pg').paginate({itemsPerPage: 3});
+	$('#trabajos_pg').paginate({itemsPerPage: 4});
 });
 </script>
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#trabajos_pg div").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+<script>
+var $btns = $('.btn').click(function() {
+  if (this.id == 'all') {
+    $('#trabajos_pg > div').fadeIn(450);
+  } else {
+    var $el = $('.' + this.id).fadeIn(450);
+    $('#trabajos_pg > div').not($el).hide();
+  }
+  $btns.removeClass('active');
+  $(this).addClass('active');
+})
+</script>
+
 {% endblock %}
 
 

@@ -1,0 +1,92 @@
+{% extends 'base_admin.html' %}
+
+
+{% block title %}Agregar carrera{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+
+{% endblock %}
+
+
+{% block main %}
+<h1 class="mt-4"></h1>
+<div class="container-fluid">
+    <div class="card mb-4">
+        <img class="card-img-top" src="static/img/sita-bg.png" alt="Logo SiTA">
+    </div>
+    <h1 class="mt-4"></h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Registrar carrera</li>
+    </ol>
+
+    <div class="contenido-pagina">
+
+        <form action="{{ url_for('agregar_carrera') }}" method="post" name="add_trabajo" id="add_trabajo">
+
+        <div>
+            <h3 style='color:green;'>{{ msg }}</h3>
+        </div>
+
+                <h2 style="margin-bottom: 2.5rem;">Carrera a agregar</h2>
+
+                <div class="form-group">
+                    <label for="nombre_carrera" class="font-weight-bold mt-4">Nombre de la Carrera</label>
+                    <input type="text" class="form-control" id="nombre_carrera" name="nombre_carrera" placeholder="Escriba el nombre de la carrera" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="facultad" class="font-weight-bold mt-4">Facultad a que pertenece</label>
+                    <select class="form-control" id="facultad" name="facultad" required>
+                        <option disabled selected>Seleccione...</option>
+                        {% for facultad in facultades %}
+                            <option value="{{ facultad['id_facultad'] }}">{{ facultad['nombre_facultad'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="escuela" class="font-weight-bold mt-4">Escuela a que pertenece</label>
+                    <select class="form-control" id="escuela" name="escuela" required>
+                        <option disabled selected>...</option>
+                    </select>
+                </div>
+
+            <div style="overflow:auto;">
+                <div style="float:left; margin-top: 20px; margin-bottom: 40px;">
+                    <input class="btn btn-success" type="submit" value="Publicar" id="postBtn">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+
+
+<script>
+facultad_select = document.getElementById('facultad');
+escuela_select = document.getElementById('escuela');
+
+facultad_select.onchange = function(){
+ facultad = facultad_select.value;
+ fetch('get_escuelas/' + facultad).then(function(response){
+  response.json().then(function(data) {
+   optionHTML = '';
+   for (escuela of data.facultad_escuela) {
+    optionHTML += '<option value="' + escuela.id_escuela +'">' + escuela.nombre_escuela + '</option>'
+   }
+   escuela_select.innerHTML = optionHTML;
+  });
+ });
+}
+</script>
+
+
+{% endblock %}
+
+{% block user %}{{ nombre }} {{ apellidos }}{% endblock %}

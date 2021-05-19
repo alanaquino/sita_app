@@ -1088,3 +1088,17 @@ form.search-box .search-form input:hover {
     padding: .1em .25em;
     font-size: 150%;
 }
+
+.container {
+  overflow: hidden;
+}
+
+.filterDiv {
+  display: none; /* Hidden by default */
+}
+
+/* The "show" class is added to the filtered elements */
+.show {
+  display: block;
+}
+
