@@ -10315,6 +10315,10 @@ input.is-invalid {
    border-color: red;
 }
 
+select.is-invalid {
+   border-color: red;
+}
+
 
 /* Hide all steps by default: */
 .tab {

@@ -22,7 +22,21 @@ mysql = MySQL(app)
 def index():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC LIMIT 3')
+        'SELECT * '
+        'FROM Trabajo_Academico '
+        'INNER JOIN Nivel_Trabajo '
+        '   ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo '
+        'INNER JOIN Tipo_Trabajo '
+        '   ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo '
+        'INNER JOIN Recinto '
+        '   ON  Trabajo_Academico.id_recinto = Recinto.id_recinto '
+        'INNER JOIN Facultad '
+        '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+        'INNER JOIN Escuela '
+        '   ON Trabajo_Academico.id_escuela = Escuela.id_escuela '
+        'INNER JOIN Carrera '
+        '   ON Trabajo_Academico.id_carrera = Carrera.id_carrera '
+        'ORDER BY fecha_publicacion DESC LIMIT 3')
     trabajos = cursor.fetchall()
     cursor.execute('SELECT * FROM Estudiante')
     estudiantes = cursor.fetchall()
@@ -35,12 +49,30 @@ def publicaciones():
     cursor.execute('SELECT COUNT(*) FROM Trabajo_Academico')
     total = cursor.fetchone()
     cursor.execute(
-        'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC')
+        'SELECT * FROM Trabajo_Academico '
+        'INNER JOIN Nivel_Trabajo '
+        '   ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo '
+        'INNER JOIN Tipo_Trabajo '
+        '   ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo '
+        'INNER JOIN Recinto '
+        '   ON  Trabajo_Academico.id_recinto = Recinto.id_recinto '
+        'INNER JOIN Facultad '
+        '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+        'INNER JOIN Escuela '
+        '   ON Trabajo_Academico.id_escuela = Escuela.id_escuela '
+        'INNER JOIN Carrera '
+        '   ON Trabajo_Academico.id_carrera = Carrera.id_carrera '
+        'ORDER BY fecha_publicacion DESC')
     trabajos = cursor.fetchall()
     cursor.execute('SELECT * FROM Estudiante')
     estudiantes = cursor.fetchall()
     cursor.execute(
-        'SELECT Facultad.nombre_facultad as Facultad, COUNT(Trabajo_Academico.id_facultad) as Total FROM Trabajo_Academico INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad GROUP BY Facultad.id_facultad ORDER BY COUNT(Trabajo_Academico.id_facultad) DESC')
+        'SELECT Facultad.nombre_facultad as Facultad, COUNT(Trabajo_Academico.id_facultad) as Total '
+        'FROM Trabajo_Academico '
+        'INNER JOIN Facultad '
+        '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+        'GROUP BY Facultad.id_facultad '
+        'ORDER BY COUNT(Trabajo_Academico.id_facultad) DESC')
     estadisticas = cursor.fetchall()
     return render_template('publicaciones.html', trabajos=trabajos, estudiantes=estudiantes, total=total,
                            estadisticas=estadisticas)
@@ -54,14 +86,33 @@ def buscar():
         query2 = "SELECT COUNT(*) FROM Trabajo_Academico WHERE titulo_trabajo LIKE '%{}%'".format(search_term)
         cursor.execute(query2)
         total = cursor.fetchone()
-        query = "SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE titulo_trabajo LIKE '%{}%'".format(
+        query = "SELECT * " \
+                "FROM Trabajo_Academico " \
+                "INNER JOIN Nivel_Trabajo " \
+                "   ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo " \
+                "INNER JOIN Tipo_Trabajo " \
+                "   ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo " \
+                "INNER JOIN Recinto " \
+                "   ON  Trabajo_Academico.id_recinto = Recinto.id_recinto " \
+                "INNER JOIN Facultad " \
+                "   ON Trabajo_Academico.id_facultad = Facultad.id_facultad " \
+                "INNER JOIN Escuela " \
+                "   ON Trabajo_Academico.id_escuela = Escuela.id_escuela " \
+                "INNER JOIN Carrera " \
+                "   ON Trabajo_Academico.id_carrera = Carrera.id_carrera " \
+                "WHERE titulo_trabajo LIKE '%{}%'".format(
             search_term)
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.execute('SELECT * FROM Estudiante')
         estudiantes = cursor.fetchall()
         cursor.execute(
-            'SELECT Facultad.nombre_facultad as Facultad, COUNT(Trabajo_Academico.id_facultad) as Total FROM Trabajo_Academico INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad GROUP BY Facultad.id_facultad ORDER BY COUNT(Trabajo_Academico.id_facultad) DESC')
+            'SELECT Facultad.nombre_facultad as Facultad, COUNT(Trabajo_Academico.id_facultad) as Total '
+            'FROM Trabajo_Academico '
+            'INNER JOIN Facultad '
+            '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+            'GROUP BY Facultad.id_facultad '
+            'ORDER BY COUNT(Trabajo_Academico.id_facultad) DESC')
         estadisticas = cursor.fetchall()
         return render_template("buscar.html", trabajos=result, estudiantes=estudiantes, estadisticas=estadisticas,
                                total=total, search_term=search_term)
@@ -74,7 +125,20 @@ def publicacion(id_trabajo):
     id_trabajo = id_trabajo
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera WHERE id_trabajo  = %s',
+        'SELECT * FROM Trabajo_Academico '
+        'INNER JOIN Nivel_Trabajo '
+        '   ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo '
+        'INNER JOIN Tipo_Trabajo '
+        '   ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo '
+        'INNER JOIN Recinto '
+        '   ON  Trabajo_Academico.id_recinto = Recinto.id_recinto '
+        'INNER JOIN Facultad '
+        '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+        'INNER JOIN Escuela '
+        '   ON Trabajo_Academico.id_escuela = Escuela.id_escuela '
+        'INNER JOIN Carrera '
+        '   ON Trabajo_Academico.id_carrera = Carrera.id_carrera '
+        'WHERE id_trabajo  = %s',
         (id_trabajo,))
     trabajo = cursor.fetchone()
     cursor.execute('SELECT * FROM Estudiante')
@@ -134,7 +198,21 @@ def ver_trabajos():
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera ORDER BY fecha_publicacion DESC')
+            'SELECT * '
+            'FROM Trabajo_Academico '
+            'INNER JOIN Nivel_Trabajo '
+            '   ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo '
+            'INNER JOIN Tipo_Trabajo '
+            '   ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo '
+            'INNER JOIN Recinto '
+            '   ON  Trabajo_Academico.id_recinto = Recinto.id_recinto '
+            'INNER JOIN Facultad '
+            '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+            'INNER JOIN Escuela '
+            '   ON Trabajo_Academico.id_escuela = Escuela.id_escuela '
+            'INNER JOIN Carrera '
+            '   ON Trabajo_Academico.id_carrera = Carrera.id_carrera '
+            'ORDER BY fecha_publicacion DESC')
         trabajos = cursor.fetchall()
         cursor.execute('SELECT * FROM Estudiante')
         estudiantes = cursor.fetchall()
@@ -152,7 +230,22 @@ def ver_trabajo(id_trabajo):
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            'SELECT * FROM Trabajo_Academico INNER JOIN Nivel_Trabajo ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo INNER JOIN Tipo_Trabajo ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo INNER JOIN Recinto ON  Trabajo_Academico.id_recinto = Recinto.id_recinto INNER JOIN Facultad ON Trabajo_Academico.id_facultad = Facultad.id_facultad INNER JOIN Escuela ON Trabajo_Academico.id_escuela = Escuela.id_escuela INNER JOIN Carrera ON Trabajo_Academico.id_carrera = Carrera.id_carrera INNER JOIN Cuenta_Usuario ON Trabajo_Academico.registrado_por = Cuenta_Usuario.id_usuario WHERE id_trabajo  = %s',
+            'SELECT * FROM Trabajo_Academico '
+            'INNER JOIN Nivel_Trabajo '
+            '   ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo '
+            'INNER JOIN Tipo_Trabajo '
+            '   ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo '
+            'INNER JOIN Recinto '
+            '   ON  Trabajo_Academico.id_recinto = Recinto.id_recinto '
+            'INNER JOIN Facultad '
+            '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+            'INNER JOIN Escuela'
+            '   ON Trabajo_Academico.id_escuela = Escuela.id_escuela '
+            'INNER JOIN Carrera '
+            '   ON Trabajo_Academico.id_carrera = Carrera.id_carrera '
+            'INNER JOIN Cuenta_Usuario '
+            '   ON Trabajo_Academico.registrado_por = Cuenta_Usuario.id_usuario '
+            'WHERE id_trabajo  = %s',
             (id_trabajo,))
         trabajo = cursor.fetchone()
         cursor.execute('SELECT * FROM Estudiante')
@@ -165,12 +258,81 @@ def ver_trabajo(id_trabajo):
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route("/editar_trabajo/<id_trabajo>")
+def editar_trabajo(id_trabajo):
+    id_trabajo = id_trabajo
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # We need all the account info for the user so we can display it on the profile page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            'SELECT * FROM Trabajo_Academico '
+            'INNER JOIN Nivel_Trabajo '
+            '   ON  Trabajo_Academico.id_nivel_trabajo = Nivel_Trabajo.id_nivel_trabajo '
+            'INNER JOIN Tipo_Trabajo '
+            '   ON  Trabajo_Academico.id_tipo_trabajo = Tipo_Trabajo.id_tipo_trabajo '
+            'INNER JOIN Recinto '
+            '   ON  Trabajo_Academico.id_recinto = Recinto.id_recinto '
+            'INNER JOIN Facultad '
+            '   ON Trabajo_Academico.id_facultad = Facultad.id_facultad '
+            'INNER JOIN Escuela '
+            '   ON Trabajo_Academico.id_escuela = Escuela.id_escuela '
+            'INNER JOIN Carrera '
+            '   ON Trabajo_Academico.id_carrera = Carrera.id_carrera '
+            'INNER JOIN Cuenta_Usuario '
+            '   ON Trabajo_Academico.registrado_por = Cuenta_Usuario.id_usuario '
+            'WHERE id_trabajo  = %s',
+            (id_trabajo,))
+        trabajo = cursor.fetchone()
+        cursor.execute('SELECT * FROM Estudiante')
+        estudiantes = cursor.fetchall()
+        cursor.execute('SELECT * FROM Asesor')
+        asesores = cursor.fetchall()
+        cursor.execute('SELECT * FROM Recinto')
+        recintos = cursor.fetchall()
+        cursor.execute("SELECT * FROM Facultad")
+        facultades = cursor.fetchall()
+        # Show the profile page with account info
+        return render_template("editar_trabajo.html", nombre=session['nombre'], apellidos=session['apellidos'],
+                               trabajo=trabajo, estudiantes=estudiantes, asesores=asesores, recintos=recintos,
+                               facultades=facultades)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/editar_trabajo/get_escuelas/<id_facultad>')
+def get_escuelas2(id_facultad):
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    result = cur.execute("SELECT * FROM Escuela WHERE id_facultad = %s", [id_facultad])
+    escuelas = cur.fetchall()
+    escuelaArray = []
+    for escuela in escuelas:
+        escuelaObj = {
+            'id_escuela': escuela['id_escuela'],
+            'nombre_escuela': escuela['nombre_escuela']}
+        escuelaArray.append(escuelaObj)
+    return jsonify({'facultad_escuela': escuelaArray})
+
+
+@app.route('/editar_trabajo/get_carreras/<id_escuela>')
+def get_carreras2(id_escuela):
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    result = cur.execute("SELECT * FROM Carrera WHERE id_escuela = %s", [id_escuela])
+    carreras = cur.fetchall()
+    carreraArray = []
+    for carrera in carreras:
+        carreraObj = {
+            'id_carrera': carrera['id_carrera'],
+            'nombre_carrera': carrera['nombre_carrera']}
+        carreraArray.append(carreraObj)
+    return jsonify({'listacarreras': carreraArray})
+
 
 @app.route('/registrar_trabajo', methods=['GET', 'POST'])
 def registrar_trabajo():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Recinto')
+        cursor.execute('SELECT * '
+                       'FROM Recinto')
         recintos = cursor.fetchall()
         cursor.execute("SELECT * FROM Facultad")
         facultades = cursor.fetchall()
@@ -211,11 +373,22 @@ def registrar_trabajo():
                 uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename))
 
             cursor.execute(
-                'INSERT INTO Trabajo_Academico (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo,'
-                'fecha_publicacion, id_recinto, id_facultad, id_escuela, id_carrera, registrado_por, archivo_adjunto) '
+                'INSERT INTO Trabajo_Academico ('
+                'titulo_trabajo, '
+                'extracto, '
+                'id_tipo_trabajo, '
+                'id_nivel_trabajo,'
+                'fecha_publicacion, '
+                'id_recinto, '
+                'id_facultad, '
+                'id_escuela, '
+                'id_carrera, '
+                'registrado_por, '
+                'archivo_adjunto) '
                 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo, fecha_publicacion, id_recinto,
-                 id_facultad, id_escuela, id_carrera, registrado_por, uploaded_file.filename,))
+                (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo,
+                 fecha_publicacion, id_recinto, id_facultad, id_escuela, id_carrera,
+                 registrado_por, uploaded_file.filename,))
             mysql.connection.commit()
 
             # Obtiene el ID del trabajo registrado para asignaselo a los estudiantes y asesores
@@ -278,7 +451,10 @@ def get_carreras(id_escuela):
 def ver_escuelas():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Escuela inner join Facultad WHERE Escuela.id_facultad = Facultad.id_facultad')
+        cursor.execute('SELECT * '
+                       'FROM Escuela '
+                       '    INNER JOIN Facultad '
+                       'WHERE Escuela.id_facultad = Facultad.id_facultad')
         escuelas = cursor.fetchall()
         return render_template('ver_escuelas.html', nombre=session['nombre'], apellidos=session['apellidos'],
                                escuelas=escuelas)
@@ -291,7 +467,10 @@ def ver_carreras():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM Carrera inner join Escuela WHERE Carrera.id_escuela = Escuela.id_escuela')
+        cursor.execute('SELECT * '
+                       'FROM Carrera '
+                       '    INNER JOIN Escuela '
+                       'WHERE Carrera.id_escuela = Escuela.id_escuela')
         carreras = cursor.fetchall()
         # Show the profile page with account info
         return render_template("ver_carreras.html", nombre=session['nombre'], apellidos=session['apellidos'],
@@ -347,7 +526,10 @@ def perfil():
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            'SELECT * FROM Cuenta_Usuario INNER JOIN Recinto ON Cuenta_Usuario.id_recinto = Recinto.id_recinto WHERE id_usuario = %s',
+            'SELECT * FROM Cuenta_Usuario '
+            'INNER JOIN Recinto '
+            '   ON Cuenta_Usuario.id_recinto = Recinto.id_recinto '
+            'WHERE id_usuario = %s',
             (session['id_usuario'],))
         usuarios = cursor.fetchall()
         # Show the profile page with account info

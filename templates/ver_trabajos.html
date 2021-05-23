@@ -30,6 +30,7 @@
             <th>Facultad</th>
             <th>Escuela</th>
             <th>Carrera</th>
+            <th>Acciones</th>
           </tr>
           </thead>
           <tbody>
@@ -57,6 +58,17 @@
             <td> {{ trabajo['nombre_facultad'] }}</td>
             <td> {{ trabajo['nombre_escuela'] }}</td>
             <td> {{ trabajo['nombre_carrera'] }}</td>
+            <td>
+             <a href="{{ url_for('editar_trabajo', id_trabajo = trabajo['id_trabajo']) }}" type="button" class="btn btn-sm btn-block btn-outline-primary">
+                <i class="fas fa-edit"></i>
+                Editar
+              </a>
+
+              <a href="{{ url_for('editar_trabajo', id_trabajo = trabajo['id_trabajo']) }}" type="button" class="btn btn-sm btn-block btn-outline-danger">
+                <i class="fas fa-trash"></i>
+                Eliminar
+              </a>
+            </td>
           </tr>
 
           {% endfor %}
