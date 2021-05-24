@@ -1,0 +1,41 @@
+{% extends 'base_admin.html' %}
+
+
+{% block title %}Usuarios{% endblock %}
+
+{% block main %}
+<h1 class="mt-4"></h1>
+<div class="container-fluid">
+    <div class="card mb-4">
+        <img class="card-img-top" src="static/img/sita-bg.png" alt="Logo SiTA">
+    </div>
+
+    <div class="row align-items-center" style="margin-top: 7%;">
+    <div class="col-3">
+
+    </div>
+    <div class="col">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">
+            <i class="fas fa-check-circle"></i>
+            Operación completada!
+        </h4>
+        <p>{{ msg }}</p>
+          <hr style="margin-bottom: 0px;">
+          Ya puedes <a href="{{ url_for('ver_trabajos') }}" class="alert-link">regresar a la página anterior</a>
+    </div>
+    </div>
+    <div class="col-3">
+
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block user %}{{ nombre }} {{ apellidos }}{% endblock %}

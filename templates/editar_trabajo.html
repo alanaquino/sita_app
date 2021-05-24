@@ -40,18 +40,24 @@
     </div>
     <h1 class="mt-4"></h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Registrar trabajo</li>
+        <li class="breadcrumb-item active">Actualizar trabajo</li>
     </ol>
 
     <div class="contenido-pagina">
 
-        <form action="{{ url_for('registrar_trabajo') }}" method="post" name="edit_trabajo" id="edit_trabajo" enctype="multipart/form-data">
+        <form action="{{ url_for('actualizar_trabajo') }}" method="post" name="edit_trabajo" id="edit_trabajo" enctype="multipart/form-data">
 
         <div>
             <h3 style='color:green;'>{{ msg }}</h3>
         </div>
 
                 <h2 style="margin-bottom: 2.5rem;">Trabajo académico</h2>
+
+                <div class="form-group tab">
+                    <label for="id_trabajo" class="font-weight-bold">id_trabajo</label>
+                    <input type="text" class="form-control" id="id_trabajo" name="id_trabajo" value="{{ trabajo['id_trabajo'] }}">
+                </div>
+
                 <div class="form-group">
                     <label for="titulo" class="font-weight-bold">Título</label>
                     <input type="text" class="form-control requerido" id="titulo" name="titulo" value="{{ trabajo['titulo_trabajo'] }}" required>
@@ -60,11 +66,14 @@
                 <div class="form-group">
                     <label for="extracto" class="font-weight-bold mt-4">Resumen (opcional)</label>
                     <p>Escriba el resumen de su trabajo académico, facilitará la busqueda del mismo.</p>
-                  {% if trabajo['extracto'] is none %}
-                     <textarea id="extracto" name="extracto" rows="2" cols="79" class="form-control"></textarea>
-                  {% else %}
-                    <textarea id="extracto" name="extracto" rows="2" cols="79" class="form-control">{{ trabajo['extracto'] }}</textarea>
-                  {% endif %}
+
+                    {% if trabajo['extracto'] == '' %}
+                        <textarea id="extracto" name="extracto" rows="2" cols="79" class="form-control"></textarea>
+                    {% elif trabajo['extracto'] is none %}
+                         <textarea id="extracto" name="extracto" rows="2" cols="79" class="form-control"></textarea>
+                    {% else %}
+                        <textarea id="extracto" name="extracto" rows="2" cols="79" class="form-control">{{ trabajo['extracto'] }}</textarea>
+                    {%endif %}
                 </div>
 
                 <div class="form-group">
@@ -114,7 +123,7 @@
                 <div class="form-group">
                     <label for="facultad" class="font-weight-bold mt-4">Facultad</label>
                     <select class="form-control requerido" id="facultad" name="facultad" required>
-                            <option selected>{{ trabajo['nombre_facultad'] }}</option>
+                            <option selected value="{{ trabajo['id_facultad'] }}">{{ trabajo['nombre_facultad'] }}</option>
                         {% for facultad in facultades %}
                             <option value="{{ facultad['id_facultad'] }}">{{ facultad['nombre_facultad'] }}</option>
                         {% endfor %}
@@ -124,14 +133,14 @@
                 <div class="form-group">
                     <label for="escuela" class="font-weight-bold mt-4">Escuela</label>
                     <select class="form-control requerido" id="escuela" name="escuela" required>
-                        <option selected>{{ trabajo['nombre_escuela'] }}</option>
+                        <option selected value="{{ trabajo['id_escuela'] }}">{{ trabajo['nombre_escuela'] }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="carrera" class="font-weight-bold mt-4">Carrera</label>
                     <select class="form-control requerido" id="carrera" name="carrera" required>
-                        <option selected>{{ trabajo['nombre_carrera'] }}</option>
+                        <option selected value="{{ trabajo['id_carrera'] }}">{{ trabajo['nombre_carrera'] }}</option>
                     </select>
                 </div>
 
@@ -139,8 +148,10 @@
                     <label for="archivo" class="font-weight-bold mt-4">Archivo adjunto *(Opcional)</label>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="archivo" name="archivo" accept=".doc,.docx,.pdf">
-                        {% if trabajo['archivo_adjunto'] is none %}
-                        <label class="custom-file-label" for="archivo">Subir el archivo de su trabajo académico...</label>
+                        {% if trabajo['archivo_adjunto'] == '' %}
+                         <label class="custom-file-label" for="archivo">Subir el archivo de su trabajo académico...</label>
+                        {% elif trabajo['archivo_adjunto'] is none %}
+                         <label class="custom-file-label" for="archivo">Subir el archivo de su trabajo académico...</label>
                         {% else %}
                         <label class="custom-file-label" for="archivo">{{ trabajo['archivo_adjunto'] }}</label>
                         {% endif %}
@@ -155,19 +166,25 @@
             <div id="InputsWrapper">
                 {% for estudiante in estudiantes if estudiante['id_trabajo'] == trabajo['id_trabajo'] %}
                 <div class="form-row" style="margin-bottom: 10px;">
-                    <div class="col">
-                        <input type="text" name="nombres_estudiantes[]" id="nombre_est_1" class="form-control nombre_list" value="{{ estudiante['nombres'] }}">
+                    <div class="col col-1 tab">
+                        <input type="number" name="id_estudiantes[]" id="id_est_{{ loop.index }}" class="form-control id_list" value="{{ estudiante['id_estudiante'] }}">
                     </div>
                     <div class="col">
-                        <input type="text" name="apellidos_estudiantes[]" id="apellido_est_1" class="form-control apellido_list" value="{{ estudiante['apellidos'] }}">
+                        <input type="text" name="nombres_estudiantes[]" id="nombre_est_{{ loop.index }}" class="form-control nombre_list" value="{{ estudiante['nombres'] }}">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="apellidos_estudiantes[]" id="apellido_est_{{ loop.index }}" class="form-control apellido_list" value="{{ estudiante['apellidos'] }}">
                     </div>
                     <div class="col col-3">
-                        <input type="text" name="matricula_estudiantes[]" id="matricula_est_1" class="form-control matricula_list" value="{{ estudiante['matricula'] }}">
+                        <input type="text" name="matricula_estudiantes[]" id="matricula_est_{{ loop.index }}" class="form-control matricula_list" value="{{ estudiante['matricula'] }}">
                     </div>
                     <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" ><i class="fas fa-times"></i></button>
                 </div>
                 {% else %}
                 <div class="form-row" style="margin-bottom: 10px;">
+                    <div class="col col-1 tab">
+                        <input type="number" name="id_estudiantes[]" id="id_est_1" class="form-control id_list">
+                    </div>
                     <div class="col">
                         <input type="text" name="nombres_estudiantes[]" id="nombre_est_1" class="form-control nombre_list" placeholder="Nombre 1">
                     </div>
@@ -196,16 +213,22 @@
             <div id="InputsWrapper2">
                 {% for asesor in asesores if asesor['id_trabajo'] == trabajo['id_trabajo'] %}
                 <div class="form-row" style="margin-bottom: 10px;">
+                    <div class="col col-1 tab">
+                        <input type="number" name="id_asesores[]" id="id_as_{{ loop.index }}" class="form-control id_list" value="{{ asesor['id_asesor'] }}">
+                    </div>
                     <div class="col col-3">
-                        <input type="text" name="nombres_asesores[]" id="nombre_as_1" class="form-control nombre_as_list" value="{{ asesor['nombre'] }}">
+                        <input type="text" name="nombres_asesores[]" id="nombre_as_{{ loop.index }}" class="form-control nombre_as_list" value="{{ asesor['nombre'] }}">
                     </div>
                     <div class="col">
-                        <input type="text" name="apellidos_asesores[]" id="apellido_as_1" class="form-control apellido_as_list" value="{{ asesor['apellidos'] }}">
+                        <input type="text" name="apellidos_asesores[]" id="apellido_as_{{ loop.index }}1" class="form-control apellido_as_list" value="{{ asesor['apellidos'] }}">
                     </div>
                     <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" ><i class="fas fa-times"></i></button>
                 </div>
                 {% else %}
                 <div class="form-row" style="margin-bottom: 10px;">
+                    <div class="col col-1 tab">
+                        <input type="number" name="id_asesores[]" id="id_as_1" class="form-control id_list">
+                    </div>
                     <div class="col col-3">
                         <input type="text" name="nombres_asesores[]" id="nombre_as_1" class="form-control nombre_as_list" placeholder="Nombre asesor 1">
                     </div>
@@ -223,7 +246,7 @@
 
 
             <div style="overflow:auto;">
-                <div style="float:left; margin-top: 20px;">
+                <div style="float:left; margin-bottom: 40px;">
                     <input class="btn btn-primary" type="submit" value="Actualizar" id="postBtn">
                 </div>
             </div>
@@ -319,7 +342,7 @@ return false;
 });
 
 $("body").on("click",".removeclass", function(e){ //user click on remove text
-        if( x > 1 ) {
+        if( x > 0 ) {
                 $(this).parent('div').remove(); //remove text box
                 x--; //decrement textbox
         }
@@ -327,7 +350,7 @@ return false;
 })
 
 $("body").on("click",".removeclass2", function(e){ //user click on remove text
-        if( x2 > 1 ) {
+        if( x2 > 0 ) {
                 $(this).parent('div').remove(); //remove text box
                 x2--; //decrement textbox
         }

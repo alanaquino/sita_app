@@ -143,7 +143,9 @@
           <div class="card-body">
             <h4 class="card-title" style="font-weight: 500;color: #0d6efd;">Información adicional</h4>
             <h6 style="font-weight: bold;margin-top: 25px;margin-bottom: 5px;">Documentos & Links:</h6>
-              {% if trabajo['archivo_adjunto'] is none %}
+              {% if trabajo['archivo_adjunto'] == '' %}
+                No se han cargado documentos a este trabajo académico.
+              {% elif trabajo['archivo_adjunto'] is none %}
                 No se han cargado documentos a este trabajo académico.
               {% else %}
                 <a href="{{ url_for('static', filename='uploads/' + trabajo['archivo_adjunto']) }}">
@@ -161,7 +163,9 @@
           <div class="card-body">
             <h4 class="card-title" style="padding-left: 7px;font-weight: 500;color: #0d6efd;">Resumen</h4>
             <p class="card-text" style="padding-left: 7px;">
-              {% if trabajo['extracto'] is none %}
+               {% if trabajo['extracto'] == '' %}
+                No se ha escrito un resumen para este trabajo académico.
+              {% elif trabajo['extracto'] is none %}
                 No se ha escrito un resumen para este trabajo académico.
               {% else %}
                 {{ trabajo['extracto'] }}
