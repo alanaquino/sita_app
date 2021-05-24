@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from ast import dump
+
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import os
@@ -536,6 +538,39 @@ def perfil():
         return render_template('perfil.html', usuarios=usuarios)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+
+@app.route('/cambio_clave', methods=['GET', 'POST'])
+def cambiar_clave():
+    if request.method == 'POST' and 'clave_antigua' in request.form and 'clave_nueva' in request.form:
+        id_usuario = str(session['id_usuario'])
+        clave_antigua = request.form['clave_antigua']
+        clave_nueva = request.form['clave_nueva']
+        confirmacion_clave_nueva = request.form['confirmacion_clave_nueva']
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM Cuenta_Usuario WHERE id_usuario = %s', (id_usuario,))
+        registro_obtenido = cursor.fetchall()
+        confirmacion_clave_antigua = registro_obtenido[0]['password']
+
+        if clave_antigua == confirmacion_clave_antigua:
+            if clave_nueva != confirmacion_clave_nueva:
+                mensaje = "Las contraseñas nuevas introducidas no son iguales!"
+                flash(mensaje, 'danger')
+                return redirect(url_for('cambiar_clave'))
+
+            cursor.execute("UPDATE Cuenta_Usuario SET password ='{0}' WHERE id_usuario = '{1}'".format(clave_nueva, id_usuario))
+            mysql.connection.commit()
+            cursor.close()
+            mensaje = "Contraseña cambiada correctamente!"
+            flash(mensaje, 'success')
+            return redirect(url_for('perfil'))
+        else:
+            mensaje = "La clave antigua introducida es incorrecta!"
+            flash(mensaje, 'danger')
+            return redirect(url_for('cambiar_clave'))
+
+    return render_template('cambiar_clave.html')
+
 
 
 @app.route('/logout')

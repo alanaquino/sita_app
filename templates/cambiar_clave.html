@@ -7,25 +7,22 @@
 <div class="container-fluid">
     <ol class="breadcrumb my-5 justify-content-center">
         <li class="breadcrumb-item active lead font-weight-bold">
-            Datos del usuario
+            Cambiar clave de usuario
         </li>
     </ol>
-
-    <div class="text-center">
-        <i class="fas fa-user-circle text-dark mb-3" style="font-size: 9rem;"></i>
+    <div class="d-flex justify-content-center">
+        <form action="/cambio_clave" method="post">
+            <label for="clave_antigua" style="font-size:1.2rem;">Ingrese su contraseña antigua</label>
+            <input type="password" name="clave_antigua" class="form-control">
+            <label for="clave_nueva" style="font-size:1.2rem;">Ingrese su contraseña nueva</label>
+            <input type="password" name="clave_nueva" class="form-control">
+            <label for="confirmacion_clave_nueva" style="font-size:1.2rem;">Confirme su contraseña nueva</label>
+            <input type="password" name="confirmacion_clave_nueva" class="form-control">
+            <input type="submit" class="btn btn-success mt-3 w-100" value="Cambiar contraseña">
+        </form>
     </div>
-    {% for usuario in usuarios %}
-        <p class="lead text-center"><span class="font-weight-bold">Nombre:</span> {{ usuario['nombre'] }}</p>
-        <p class="lead text-center"><span class="font-weight-bold">Apellidos:</span> {{ usuario['apellidos'] }}</p>
-        <p class="lead text-center"><span class="font-weight-bold">Nombre de usuario:</span> {{ usuario['username'] }}</p>
-        <p class="lead text-center"><span class="font-weight-bold">Fecha de registro:</span> {{ usuario['fecha_registro'].strftime('%d %B, %Y')  }}</p>
-        <p class="lead text-center"><span class="font-weight-bold">Recinto:</span> {{ usuario['nombre_recinto'] }}</p>
-        <p class="lead text-center">
-            <a class="mt-5 text-primary" href="{{ url_for('cambiar_clave', id_usuario = usuario['id_usuario']) }}">¿Desea cambiar su contraseña? {{ usuario['password'] }}</a>
-        </p>
-    {% endfor %}
 
-    <div>
+     <div>
         {% with mensajes = get_flashed_messages(with_categories=True) %}
             {% if mensajes %}
                 {% for categoria, mensaje in mensajes %}
