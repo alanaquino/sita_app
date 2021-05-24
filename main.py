@@ -640,7 +640,7 @@ def perfil():
             (session['id_usuario'],))
         usuarios = cursor.fetchall()
         # Show the profile page with account info
-        return render_template('perfil.html', usuarios=usuarios)
+        return render_template('perfil.html', nombre=session['nombre'], apellidos=session['apellidos'], usuarios=usuarios)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
