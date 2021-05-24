@@ -260,6 +260,7 @@ def ver_trabajo(id_trabajo):
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 @app.route("/editar_trabajo/<id_trabajo>")
 def editar_trabajo(id_trabajo):
     id_trabajo = id_trabajo
@@ -301,6 +302,7 @@ def editar_trabajo(id_trabajo):
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+
 @app.route('/editar_trabajo/get_escuelas/<id_facultad>')
 def get_escuelas2(id_facultad):
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -327,6 +329,109 @@ def get_carreras2(id_escuela):
             'nombre_carrera': carrera['nombre_carrera']}
         carreraArray.append(carreraObj)
     return jsonify({'listacarreras': carreraArray})
+
+
+@app.route('/actualizar_trabajo', methods=['GET', 'POST'])
+def actualizar_trabajo():
+    if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * '
+                       'FROM Recinto')
+        recintos = cursor.fetchall()
+        cursor.execute("SELECT * FROM Facultad")
+        facultades = cursor.fetchall()
+
+        msg = ''
+        id_est = ''
+        nombres_est = ''
+        apellidos_est = ''
+        matricula_est = ''
+        id_as = ''
+        nombres_as = ''
+        apellidos_as = ''
+        i = 0
+
+        # Si se envía el formulario
+        if request.method == 'POST':
+            id_trabajo = request.form['id_trabajo']
+            titulo_trabajo = request.form['titulo']
+            extracto = request.form['extracto']
+            id_tipo_trabajo = request.form['tipo_trabajo_academico']
+            id_nivel_trabajo = request.form['nivel_trabajo_academico']
+            fecha_publicacion = request.form['fecha_publicacion']
+            id_recinto = request.form['recinto_universitario']
+            id_facultad = request.form['facultad']
+            id_escuela = request.form['escuela']
+            id_carrera = request.form['carrera']
+            registrado_por = session['id_usuario']
+
+            if request.files['archivo'] is None:
+                uploaded_file = None
+            else:
+                uploaded_file = request.files['archivo']
+
+            # Obtiene los datos de los estudiantes ingresados
+            id_est = request.form.getlist('id_estudiantes[]')
+            nombres_est = request.form.getlist('nombres_estudiantes[]')
+            apellidos_est = request.form.getlist('apellidos_estudiantes[]')
+            matricula_est = request.form.getlist('matricula_estudiantes[]')
+            # Obtiene los datos de los asesores ingresados
+            id_as = request.form.getlist('id_asesores[]')
+            nombres_as = request.form.getlist('nombres_asesores[]')
+            apellidos_as = request.form.getlist('apellidos_asesores[]')
+
+            # guarda el archivo adjunto
+            if uploaded_file.filename != '':
+                uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename))
+
+            cursor.execute('UPDATE Trabajo_Academico '
+                           'SET titulo_trabajo = %s,'
+                           'extracto = %s, '
+                           'id_tipo_trabajo = %s, '
+                           'id_nivel_trabajo = %s,'
+                           'fecha_publicacion = %s, '
+                           'id_recinto = %s, '
+                           'id_facultad = %s, '
+                           'id_escuela = %s, '
+                           'id_carrera = %s, '
+                           'registrado_por = %s, '
+                           'archivo_adjunto = %s '
+                           'WHERE id_trabajo = %s',
+                           (titulo_trabajo, extracto, id_tipo_trabajo, id_nivel_trabajo,
+                            fecha_publicacion, id_recinto, id_facultad, id_escuela, id_carrera,
+                            registrado_por, uploaded_file.filename, id_trabajo,))
+            mysql.connection.commit()
+
+            print(cursor.rowcount, "Trabajo_Academico(s) affected")
+
+            if not nombres_est:
+                print("List is empty")
+            else:
+                while i < len(nombres_est):
+                    print(nombres_est[i], apellidos_est[i], matricula_est[i], id_est[i])
+                    sql = "UPDATE Estudiante SET nombres = %s, apellidos = %s, matricula = %s WHERE id_estudiante = %s"
+                    val = (nombres_est[i], apellidos_est[i], matricula_est[i], id_est[i])
+                    cursor.execute(sql, val)
+                    mysql.connection.commit()
+                    print(cursor.rowcount, "Estudiante(s) affected")
+                    i = i + 1
+
+            if not nombres_as:
+                print("List is empty")
+            else:
+                for x in range(len(nombres_as)):
+                    print(nombres_as[x], apellidos_as[x], id_as[x])
+                    sql2 = "UPDATE Asesor SET nombre = %s, apellidos = %s WHERE id_asesor = %s"
+                    val2 = (nombres_as[x], apellidos_as[x], id_as[x])
+                    cursor.execute(sql2, val2)
+                    mysql.connection.commit()
+                    print(cursor.rowcount, "Asesor(s) affected")
+
+            msg = 'Se ha actualizado exitosamente el Trabajo Académico #' + id_trabajo
+
+        return render_template('msj.html', nombre=session['nombre'], apellidos=session['apellidos'], msg=msg)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 @app.route('/registrar_trabajo', methods=['GET', 'POST'])
@@ -398,7 +503,6 @@ def registrar_trabajo():
 
             while i < len(nombres_est):
                 print(nombres_est[i], apellidos_est[i], matricula_est[i])
-                # print(dumps(nombres_est[i]), dumps(apellidos_est[i]), dumps(matricula_est[i]))
                 sql = "INSERT INTO Estudiante (nombres, apellidos, matricula, id_trabajo) VALUES (%s, %s, %s, %s)"
                 val = (nombres_est[i], apellidos_est[i], matricula_est[i], trabajo_est)
                 cursor.execute(sql, val)
@@ -413,8 +517,9 @@ def registrar_trabajo():
                 mysql.connection.commit()
                 x = x + 1
 
-            msg = "✔️!Trabajo registrado exitosamente!"
-
+            msg = "¡Trabajo registrado exitosamente!"
+            return render_template('msg.html', nombre=session['nombre'], apellidos=session['apellidos'], msg=msg)
+        # Mientras no se envíe el nuevo trabajo se muestra esta página
         return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],
                                recintos=recintos, facultades=facultades, msg=msg)
     # User is not loggedin redirect to login page
@@ -497,7 +602,7 @@ def agregar_carrera():
                            (nombre_carrera, id_escuela,))
             mysql.connection.commit()
 
-            msg = "✔️!Carrera registrada exitosamente!"
+            msg = "!Carrera registrada exitosamente!"
         elif request.method == 'POST':
             # Form is empty... (no POST data)
             msg = 'Please fill out the form!'

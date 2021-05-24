@@ -14,7 +14,6 @@
   </ol>
 
   <div class="card mb-4">
-
     {% if trabajo['id_facultad'] == 1 %}
       <img class="card-img-top" src="{{ url_for('static', filename='img/IN_bg.jpg') }}" alt="Card image cap">
     {% elif trabajo['id_facultad'] == 2 %}
@@ -36,6 +35,14 @@
     {% else %}
       <img class="card-img-top" src="{{ url_for('static', filename='img/sita-bg.png') }}" alt="Card image cap">
     {% endif %}
+
+    <div class="card-img-overlay" style="text-align: right;">
+      <a href="{{ url_for('editar_trabajo', id_trabajo = trabajo['id_trabajo']) }}" type="button"
+         class="btn btn-sm btn-warning">
+        <i class="fas fa-edit"></i>
+        Editar
+      </a>
+    </div>
 
     <div class="card-body">
       <h5 style="display: inline">
@@ -101,7 +108,7 @@
               {% for asesor in asesores if asesor['id_trabajo'] == trabajo['id_trabajo'] %}
               {{ asesor['nombre'] }} {{ asesor['apellidos'] }}{{ ", " if not loop.last else "" }}<br>
               {% else %}
-              No se han registrado asesores para este trabajo
+                No se han registrado asesores para este trabajo
               {% endfor %}
             </td>
           </tr>
@@ -124,7 +131,9 @@
         <div class="card-body">
           <h4 class="card-title" style="font-weight: 500;color: #0d6efd;">Información adicional</h4>
           <h6 style="font-weight: bold;margin-top: 25px;">Documentos & Links:</h6>
-              {% if trabajo['archivo_adjunto'] is none %}
+              {% if trabajo['archivo_adjunto'] == '' %}
+                No se han cargado documentos a este trabajo académico.
+              {% elif trabajo['archivo_adjunto'] is none %}
                 No se han cargado documentos a este trabajo académico.
               {% else %}
                 <a href="{{ url_for('static', filename='uploads/' + trabajo['archivo_adjunto']) }}">
@@ -144,7 +153,9 @@
         <div class="card-body">
           <h4 class="card-title" style="font-weight: 500;color: #0d6efd;">Resumen</h4>
           <p class="card-text">
-              {% if trabajo['extracto'] is none %}
+              {% if trabajo['extracto'] == '' %}
+                No se ha escrito un resumen para este trabajo académico.
+              {% elif trabajo['extracto'] is none %}
                 No se ha escrito un resumen para este trabajo académico.
               {% else %}
                 {{ trabajo['extracto'] }}

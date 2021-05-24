@@ -46,21 +46,22 @@ a.disabled {
 
                  <div class="input-group" style="margin-bottom: 10px;">
                      <input class="form-control" id="myInput" type="text"
-                            placeholder="¿Qué deseas filtrar?..."> </input>
+                            placeholder="¿Qué deseas filtrar?...">
                  </div>
 
                  <div style="margin-bottom: 30px;margin-top: 30px;" data-aos="fade-up" data-aos-delay="300">
-
                      <ul class="list-group">
-                     {% for estadistica in estadisticas %}
-                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                         <strong>{{ estadistica['Facultad']| replace("Ciencias","") | replace("de la","") }}</strong>
-                         ({{ estadistica['Total'] }})
-                     </li>
-                     {% endfor %}
-                 </ul>
-
+                         {% for estadistica in estadisticas %}
+                         <li class="list-group-item d-flex justify-content-between align-items-center">
+                             <strong>{{ estadistica['Facultad']| replace("Ciencias","") | replace("de la","")
+                                 }}</strong>
+                             ({{ estadistica['Total'] }})
+                         </li>
+                         {% endfor %}
+                     </ul>
                  </div>
+
+
              </div>
 
             <div class="col-sm-9">
