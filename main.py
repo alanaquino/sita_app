@@ -511,11 +511,6 @@ def registrar_trabajo():
                     i = i + 1
                     print(cursor.rowcount, "Estudiante(s) affected")
 
-            """if not nombres_as or nombres_as is None:
-                print("List Asesores is NULL")
-            elif nombres_as == '' or nombres_as == ' ' or apellidos_as is None:
-                print("List Asesores is empty")
-            else:  """
             for x in range(len(nombres_as)):
                 if nombres_as[x] != '' and apellidos_as[x] != '':
                     print(nombres_as[x], apellidos_as[x])
