@@ -511,18 +511,21 @@ def registrar_trabajo():
                     i = i + 1
                     print(cursor.rowcount, "Estudiante(s) affected")
 
-            if not nombres_as or nombres_as is None:
+            """if not nombres_as or nombres_as is None:
                 print("List Asesores is NULL")
             elif nombres_as == '' or nombres_as == ' ' or apellidos_as is None:
                 print("List Asesores is empty")
-            else:
-                for x in range(len(nombres_as)):
+            else:  """
+            for x in range(len(nombres_as)):
+                if nombres_as[x] != '' and apellidos_as[x] != '':
                     print(nombres_as[x], apellidos_as[x])
                     sql2 = "INSERT INTO Asesor (nombre, apellidos, id_trabajo) VALUES (%s, %s, %s)"
                     val2 = (nombres_as[x], apellidos_as[x], trabajo_est)
                     cursor.execute(sql2, val2)
                     mysql.connection.commit()
                     print(cursor.rowcount, "Asesor(s) affected")
+                else:
+                    print("List Asesores is empty")
 
             mensaje = "¡Trabajo registrado exitosamente!"
             flash(mensaje, 'success')
@@ -679,8 +682,14 @@ def cambiar_clave():
             mensaje = "Contraseña cambiada correctamente!"
             flash(mensaje, 'success')
             return redirect(url_for('perfil'))
+        elif clave_antigua != confirmacion_clave_antigua and clave_antigua != '':
+            mensaje = "La clave antigua introducida es diferente a la clave actual!"
+            flash(mensaje, 'danger')
+            return redirect(url_for('cambiar_clave'))
         else:
-            mensaje = "La clave antigua introducida es incorrecta!"
+            if clave_antigua == '':
+                mensaje = "La clave antigua está vacía!"
+
             flash(mensaje, 'danger')
             return redirect(url_for('cambiar_clave'))
 

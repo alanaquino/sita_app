@@ -5,7 +5,7 @@
 
 {% block main %}
 <div class="container-fluid">
-    <ol class="breadcrumb my-5 justify-content-center">
+    <ol class="breadcrumb my-4 justify-content-center">
         <li class="breadcrumb-item active lead font-weight-bold">
             Cambiar clave de usuario
         </li>
@@ -22,7 +22,7 @@
         </form>
     </div>
 
-     <div>
+     <div class="mb-5">
         {% with mensajes = get_flashed_messages(with_categories=True) %}
             {% if mensajes %}
                 {% for categoria, mensaje in mensajes %}
