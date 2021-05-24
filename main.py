@@ -595,6 +595,7 @@ def ver_carreras():
 
 @app.route('/agregar_carrera', methods=['GET', 'POST'])
 def agregar_carrera():
+    mensaje = ''
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute("SELECT * FROM Facultad")
