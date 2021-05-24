@@ -670,7 +670,7 @@ def cambiar_clave():
         registro_obtenido = cursor.fetchall()
         confirmacion_clave_antigua = registro_obtenido[0]['password']
 
-        if clave_antigua == confirmacion_clave_antigua:
+        if clave_antigua == confirmacion_clave_antigua and clave_nueva != confirmacion_clave_nueva and clave_nueva != '' and confirmacion_clave_nueva != '':
             if clave_nueva != confirmacion_clave_nueva:
                 mensaje = "Las contraseñas nuevas introducidas no son iguales!"
                 flash(mensaje, 'danger')
@@ -687,6 +687,7 @@ def cambiar_clave():
             flash(mensaje, 'danger')
             return redirect(url_for('cambiar_clave'))
         else:
+            mensaje = "Hay campos vacios en el formulario de cambio de contraseña!"
             if clave_antigua == '':
                 mensaje = "La clave antigua está vacía!"
 
