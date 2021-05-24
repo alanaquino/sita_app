@@ -102,8 +102,7 @@ def buscar():
                 "   ON Trabajo_Academico.id_escuela = Escuela.id_escuela " \
                 "INNER JOIN Carrera " \
                 "   ON Trabajo_Academico.id_carrera = Carrera.id_carrera " \
-                "WHERE titulo_trabajo LIKE '%{}%'".format(
-            search_term)
+                "WHERE titulo_trabajo LIKE '%{}%'".format(search_term)
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.execute('SELECT * FROM Estudiante')
@@ -335,13 +334,11 @@ def get_carreras2(id_escuela):
 def actualizar_trabajo():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * '
-                       'FROM Recinto')
+        cursor.execute('SELECT * FROM Recinto')
         recintos = cursor.fetchall()
         cursor.execute("SELECT * FROM Facultad")
         facultades = cursor.fetchall()
 
-        msg = ''
         id_est = ''
         nombres_est = ''
         apellidos_est = ''
@@ -427,9 +424,10 @@ def actualizar_trabajo():
                     mysql.connection.commit()
                     print(cursor.rowcount, "Asesor(s) affected")
 
-            msg = 'Se ha actualizado exitosamente el Trabajo Académico #' + id_trabajo
+            mensaje = 'Se ha actualizado exitosamente el Trabajo Académico #' + id_trabajo
+            flash(mensaje, 'success')
 
-        return render_template('msj.html', nombre=session['nombre'], apellidos=session['apellidos'], msg=msg)
+        return render_template('msj.html', nombre=session['nombre'], apellidos=session['apellidos'], mensaje=mensaje)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -444,7 +442,7 @@ def registrar_trabajo():
         cursor.execute("SELECT * FROM Facultad")
         facultades = cursor.fetchall()
 
-        msg = ''
+        mensaje = ''
         nombres_est = ''
         apellidos_est = ''
         matricula_est = ''
@@ -501,27 +499,38 @@ def registrar_trabajo():
             # Obtiene el ID del trabajo registrado para asignaselo a los estudiantes y asesores
             trabajo_est = cursor.lastrowid
 
-            while i < len(nombres_est):
-                print(nombres_est[i], apellidos_est[i], matricula_est[i])
-                sql = "INSERT INTO Estudiante (nombres, apellidos, matricula, id_trabajo) VALUES (%s, %s, %s, %s)"
-                val = (nombres_est[i], apellidos_est[i], matricula_est[i], trabajo_est)
-                cursor.execute(sql, val)
-                mysql.connection.commit()
-                i = i + 1
+            if not nombres_est:
+                print("List Estudiante is empty")
+            else:
+                while i < len(nombres_est):
+                    print(nombres_est[i], apellidos_est[i], matricula_est[i])
+                    sql = "INSERT INTO Estudiante (nombres, apellidos, matricula, id_trabajo) VALUES (%s, %s, %s, %s)"
+                    val = (nombres_est[i], apellidos_est[i], matricula_est[i], trabajo_est)
+                    cursor.execute(sql, val)
+                    mysql.connection.commit()
+                    i = i + 1
+                    print(cursor.rowcount, "Estudiante(s) affected")
 
-            while x < len(nombres_as):
-                print(nombres_as[x], apellidos_as[x])
-                sql2 = "INSERT INTO Asesor (nombre, apellidos, id_trabajo) VALUES (%s, %s, %s)"
-                val2 = (nombres_as[x], apellidos_as[x], trabajo_est)
-                cursor.execute(sql2, val2)
-                mysql.connection.commit()
-                x = x + 1
+            if not nombres_as or nombres_as is None:
+                print("List Asesores is NULL")
+            elif nombres_as == '' or nombres_as == ' ' or apellidos_as is None:
+                print("List Asesores is empty")
+            else:
+                for x in range(len(nombres_as)):
+                    print(nombres_as[x], apellidos_as[x])
+                    sql2 = "INSERT INTO Asesor (nombre, apellidos, id_trabajo) VALUES (%s, %s, %s)"
+                    val2 = (nombres_as[x], apellidos_as[x], trabajo_est)
+                    cursor.execute(sql2, val2)
+                    mysql.connection.commit()
+                    print(cursor.rowcount, "Asesor(s) affected")
 
-            msg = "¡Trabajo registrado exitosamente!"
-            return render_template('msg.html', nombre=session['nombre'], apellidos=session['apellidos'], msg=msg)
+            mensaje = "¡Trabajo registrado exitosamente!"
+            flash(mensaje, 'success')
+            return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],
+                                   recintos=recintos, facultades=facultades, mensaje=mensaje)
         # Mientras no se envíe el nuevo trabajo se muestra esta página
         return render_template('registrar_trabajo.html', nombre=session['nombre'], apellidos=session['apellidos'],
-                               recintos=recintos, facultades=facultades, msg=msg)
+                               recintos=recintos, facultades=facultades, mensaje=mensaje)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -592,7 +601,6 @@ def agregar_carrera():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute("SELECT * FROM Facultad")
         facultades = cursor.fetchall()
-        msg = ''
         # Si se envía el formulario
         if request.method == 'POST':
             nombre_carrera = request.form['nombre_carrera']
@@ -602,13 +610,15 @@ def agregar_carrera():
                            (nombre_carrera, id_escuela,))
             mysql.connection.commit()
 
-            msg = "!Carrera registrada exitosamente!"
+            mensaje = "!Carrera registrada exitosamente!"
+            flash(mensaje, 'success')
         elif request.method == 'POST':
             # Form is empty... (no POST data)
-            msg = 'Please fill out the form!'
+            mensaje = 'Please fill out the form!'
+            flash(mensaje, 'danger')
         # Show registration form with message (if any)
         return render_template('agregar_carrera.html', nombre=session['nombre'], apellidos=session['apellidos'],
-                               facultades=facultades, msg=msg)
+                               facultades=facultades, mensaje=mensaje)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 

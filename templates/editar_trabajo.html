@@ -178,32 +178,14 @@
                     <div class="col col-3">
                         <input type="text" name="matricula_estudiantes[]" id="matricula_est_{{ loop.index }}" class="form-control matricula_list" value="{{ estudiante['matricula'] }}">
                     </div>
-                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" ><i class="fas fa-times"></i></button>
+                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" disabled><i class="fas fa-times"></i></button>
                 </div>
                 {% else %}
-                <div class="form-row" style="margin-bottom: 10px;">
-                    <div class="col col-1 tab">
-                        <input type="number" name="id_estudiantes[]" id="id_est_1" class="form-control id_list">
-                    </div>
-                    <div class="col">
-                        <input type="text" name="nombres_estudiantes[]" id="nombre_est_1" class="form-control nombre_list" placeholder="Nombre 1">
-                    </div>
-                    <div class="col">
-                        <input type="text" name="apellidos_estudiantes[]" id="apellido_est_1" class="form-control apellido_list" placeholder="Apellidos 1">
-                    </div>
-                    <div class="col col-3">
-                        <input type="text" name="matricula_estudiantes[]" id="matricula_est_1" class="form-control matricula_list" placeholder="Matrícula 1">
-                    </div>
-                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" disabled><i class="fas fa-times"></i></button>
+                <div class="alert alert-info" role="alert" style="margin-bottom: 40px;">
+                    No se han registrado estudiantes para este trabajo
                 </div>
                 {% endfor %}
             </div>
-
-            <button type="button" class="btn btn-outline-primary mt-2 btn-block" name="add" id="AddMoreFileBox" style="margin-bottom: 40px;">
-                <i class="fas fa-user-plus"></i> Agregar más
-            </button>
-
-
 
 
 
@@ -222,27 +204,15 @@
                     <div class="col">
                         <input type="text" name="apellidos_asesores[]" id="apellido_as_{{ loop.index }}1" class="form-control apellido_as_list" value="{{ asesor['apellidos'] }}">
                     </div>
-                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" ><i class="fas fa-times"></i></button>
+                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" disabled><i class="fas fa-times"></i></button>
                 </div>
                 {% else %}
-                <div class="form-row" style="margin-bottom: 10px;">
-                    <div class="col col-1 tab">
-                        <input type="number" name="id_asesores[]" id="id_as_1" class="form-control id_list">
-                    </div>
-                    <div class="col col-3">
-                        <input type="text" name="nombres_asesores[]" id="nombre_as_1" class="form-control nombre_as_list" placeholder="Nombre asesor 1">
-                    </div>
-                    <div class="col">
-                        <input type="text" name="apellidos_asesores[]" id="apellido_as_1" class="form-control apellido_as_list" placeholder="Apellidos asesor 1">
-                    </div>
-                    <button type="button" class="btn btn-danger removeclass" style="border-radius: 50%;" disabled><i class="fas fa-times"></i></button>
+                <div class="alert alert-info" role="alert" style="margin-bottom: 40px;">
+                    No se han registrado asesores para este trabajo
                 </div>
                 {% endfor %}
             </div>
 
-            <button type="button" class="btn btn-outline-primary mt-2 btn-block" name="add_2" id="AddMoreFileBox2" style="margin-bottom: 40px;">
-                <i class="fas fa-user-plus"></i> Agregar más
-            </button>
 
 
             <div style="overflow:auto;">

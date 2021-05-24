@@ -26,8 +26,28 @@
         <form action="{{ url_for('agregar_carrera') }}" method="post" name="add_trabajo" id="add_trabajo">
 
         <div>
-            <h3 style='color:green;'>{{ msg }}</h3>
-        </div>
+        {% with mensajes = get_flashed_messages(with_categories=True) %}
+            {% if mensajes %}
+                {% for categoria, mensaje in mensajes %}
+                    {% if categoria == 'success' %}
+                        <div class="alert alert-success alert-dismissible fade show text-center mt-3" role="alert">
+                           <strong> {{ mensaje }} </strong>
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                    {% elif categoria == 'danger' %}
+                        <div class="alert alert-danger alert-dismissible fade show text-center mt-3" role="alert">
+                           <strong> {{ mensaje }} </strong>
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
                 <h2 style="margin-bottom: 2.5rem;">Carrera a agregar</h2>
 
