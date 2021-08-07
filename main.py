@@ -10,10 +10,21 @@ app = Flask(__name__)
 
 app.secret_key = 'your secret key'
 
+#Configuracion anterior
+
+# app.config['MYSQL_HOST'] = '50.87.151.191'
+# app.config['MYSQL_USER'] = 'rotary40_uasd'
+# app.config['MYSQL_PASSWORD'] = 'FE7Elmxa*)y&'
+# app.config['MYSQL_DB'] = 'rotary40_uasd'
+# app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+# app.config['UPLOAD_PATH'] = 'static/uploads'
+
+#Configuracion actual
+
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'rotary40_uasd'
+app.config['MYSQL_DB'] = 'sita'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['UPLOAD_PATH'] = 'static/uploads'
 
